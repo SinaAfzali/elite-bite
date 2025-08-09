@@ -6,7 +6,7 @@ from rest_framework import status
 from .models import RestaurantManager
 from userVerification.models import VerificationCode
 from customer.utilities import SendSignupCode
-from .services import isLoggedInRestaurantManager
+from .services import getRestaurantManager
 
 
 class SignupCodeView(APIView):
@@ -160,7 +160,7 @@ class LoginVerifyView(APIView):
 
 class CheckLoginView(APIView):
     def get(self, request):
-        if isLoggedInRestaurantManager(request):
+        if getRestaurantManager(request):
             return Response({'message': 'لاگین است.', 'status': 'success'},
                         status=status.HTTP_200_OK)
         else:

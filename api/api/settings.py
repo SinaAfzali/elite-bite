@@ -54,7 +54,9 @@ INSTALLED_APPS = [
     'support',
     'analytics',
     'notifications',
-    'userVerification'
+    'userVerification',
+    'food',
+    'FoodCategory'
 ]
 
 MIDDLEWARE = [
