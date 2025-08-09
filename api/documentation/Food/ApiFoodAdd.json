@@ -1,0 +1,22 @@
+{
+  "api": "/api/food/add",
+  "method": "post",
+  "inputType": "multipart/form-data",
+  "input": {
+    "name": "string (الزامی)",
+    "price": "number (الزامی)",
+    "description": "string (اختیاری)",
+    "category": "string (اختیاری)",
+    "image": "file (jpg/jpeg/png - اختیاری)"
+  },
+  "output": {
+    "status": "success | error",
+    "message": "string"
+  },
+  "errors": [
+    { "message": "نام غذا الزامی است.", "status": 400 },
+    { "message": "قیمت غذا الزامی است.", "status": 400 },
+    { "message": "قیمت باید عدد باشد.", "status": 400 },
+    { "message": "رستوران یافت نشد.", "status": 400 }
+  ]
+}

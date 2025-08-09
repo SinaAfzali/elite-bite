@@ -1,0 +1,363 @@
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap');
+
+.container {
+    min-height: 100vh;
+    background: #F8FAFC;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 16px;
+    font-family: 'Vazirmatn', sans-serif;
+    direction: rtl;
+}
+
+.dashboardWrapper {
+    background: #FFFFFF;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 32px;
+    width: 100%;
+    max-width: 800px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1F2937;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.tabContainer {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #D1D5DB;
+}
+
+.tab {
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6B7280;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab:hover {
+    color: #00CECB;
+}
+
+.activeTab {
+    color: #00CECB;
+    border-bottom: 2px solid #00CECB;
+}
+
+.tabContent {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.restaurantCard {
+    background: #F8FAFC;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    text-align: center;
+}
+
+.restaurantImage {
+    width: 200px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.restaurantName {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1F2937;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.formTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1F2937;
+    text-align: center;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1F2937;
+}
+
+.input {
+    background: #F8FAFC;
+    border: 1px solid #D1D5DB;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #1F2937;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input:hover {
+    border-color: #00CECB;
+    box-shadow: 0 0 0 3px rgba(0, 206, 203, 0.1);
+}
+
+.input:focus {
+    border-color: #00CECB;
+    box-shadow: 0 0 0 3px rgba(0, 206, 203, 0.2);
+}
+
+.textarea {
+    background: #F8FAFC;
+    border: 1px solid #D1D5DB;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #1F2937;
+    outline: none;
+    resize: vertical;
+    min-height: 80px;
+    transition: all 0.3s ease;
+}
+
+.textarea:hover {
+    border-color: #00CECB;
+    box-shadow: 0 0 0 3px rgba(0, 206, 203, 0.1);
+}
+
+.textarea:focus {
+    border-color: #00CECB;
+    box-shadow: 0 0 0 3px rgba(0, 206, 203, 0.2);
+}
+
+.select {
+    background: #F8FAFC;
+    border: 1px solid #D1D5DB;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #1F2937;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.select:hover {
+    border-color: #00CECB;
+    box-shadow: 0 0 0 3px rgba(0, 206, 203, 0.1);
+}
+
+.select:focus {
+    border-color: #00CECB;
+    box-shadow: 0 0 0 3px rgba(0, 206, 203, 0.2);
+}
+
+.fileInput {
+    font-size: 14px;
+    color: #6B7280;
+    padding: 8px 0;
+}
+
+.areaGroup {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.button {
+    background: #00CECB;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    min-width: 100px;
+}
+
+.button:hover {
+    background: #007F7A;
+    transform: scale(1.02);
+    box-shadow: 0 0 12px rgba(0, 206, 203, 0.6);
+}
+
+.button:disabled {
+    background: #E5E7EB;
+    color: #6B7280;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.submitButton {
+    background: #00CECB;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submitButton:hover {
+    background: #007F7A;
+    transform: scale(1.02);
+    box-shadow: 0 0 12px rgba(0, 206, 203, 0.6);
+}
+
+.submitButton:disabled {
+    background: #E5E7EB;
+    color: #6B7280;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.error {
+    color: #dc3545;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 8px;
+}
+
+.success {
+    color: #28a745;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 8px;
+}
+
+.infoText {
+    font-size: 12px;
+    color: #6B7280;
+    margin-top: 8px;
+    text-align: right;
+}
+
+.foodList {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.foodItem {
+    display: flex;
+    gap: 16px;
+    background: #F8FAFC;
+    padding: 16px;
+    border-radius: 12px;
+    align-items: center;
+}
+
+.foodImage {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.orderList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.orderItem {
+    background: #F8FAFC;
+    padding: 16px;
+    border-radius: 12px;
+}
+
+.report {
+    background: #F8FAFC;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+@media (max-width: 480px) {
+    .dashboardWrapper {
+        padding: 20px;
+    }
+
+    .title {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .tab {
+        font-size: 13px;
+        padding: 10px 16px;
+    }
+
+    .form {
+        gap: 16px;
+    }
+
+    .input,
+    .textarea,
+    .select {
+        font-size: 13px;
+        padding: 10px 12px;
+    }
+
+    .label {
+        font-size: 13px;
+    }
+
+    .button,
+    .submitButton {
+        font-size: 13px;
+        padding: 10px;
+    }
+
+    .areaGroup {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .button {
+        width: 100%;
+    }
+
+    .restaurantImage {
+        width: 160px;
+        height: 96px;
+    }
+
+    .foodImage {
+        width: 60px;
+        height: 60px;
+    }
+}
