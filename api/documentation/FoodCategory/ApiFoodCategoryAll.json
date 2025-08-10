@@ -1,0 +1,19 @@
+{
+  "api": "/api/foodCategory/all",
+  "method": "get",
+  "inputType": "none",
+  "input": {},
+  "output": [
+    {
+      "status": "success",
+      "data": [
+        {
+          "id": "integer",
+          "name": "string",
+          "description": "string (اختیاری)"
+        }
+      ],
+      "statusCode": 200
+    }
+  ]
+}

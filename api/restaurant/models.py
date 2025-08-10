@@ -1,5 +1,6 @@
 from django.db import models
 
+from Area.models import Area
 from City.models import City
 from restaurantManager.models import RestaurantManager
 
@@ -14,8 +15,7 @@ class Restaurant(models.Model):
     # اطلاعات تماس و مکان
     address = models.TextField()
     city = models.ForeignKey(City, on_delete=models.CASCADE)
-    areas = models.CharField(max_length=100)
-    areasPrices = models.CharField(max_length=100)
+    areas = models.ManyToManyField(Area)
     phoneNumber = models.CharField(max_length=20)
     contactEmail = models.EmailField(blank=True, null=True)
     startWorkHour = models.IntegerField(default=0, blank=True, null=True)

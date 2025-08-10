@@ -1,0 +1,36 @@
+{
+  "api": "/api/restaurant/nearest",
+  "method": "post",
+  "inputType": "application/json",
+  "input": {
+    "areaId": "integer (آیدی عددی منطقه، الزامی)"
+  },
+  "output": [
+    {
+      "status": "success",
+      "message": "نزدیک ترین رستوران ها جستجو شد.",
+      "data": [
+        {
+          "id": "integer",
+          "name": "string",
+          "description": "string",
+          "isActive": "boolean",
+          "startWorkHour": "integer (0-23)",
+          "endWorkHour": "integer (0-23)",
+          "ratingAvg": "decimal"
+        }
+      ],
+      "statusCode": 200
+    },
+    {
+      "status": "error",
+      "message": "لطفا منطقه را مشخص کنید.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "منطقه ای که انتخاب کردید توسط سامانه پوشش داده نمیشود.",
+      "statusCode": 404
+    }
+  ]
+}

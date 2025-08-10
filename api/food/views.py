@@ -2,6 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+from Area.models import Area
+from restaurant.models import Restaurant
 from restaurant.services import getRestaurantByRestaurantManagerId
 from services.Authorization import require_authorization_manager
 from services.ImageValidation import ImageValidation
@@ -65,3 +67,45 @@ class AddFoodView(APIView):
             "message": "غذا با موفقیت اضافه شد.",
             "foodId": food.id
         }, status=status.HTTP_201_CREATED)
+
+
+class GetFoodsByAreaView(APIView):
+    def post(self, request):
+        areaId = request.data.get('areaId')
+        if not areaId:
+            return Response({
+                "status": "error",
+                "message": "منطقه خود را مشخص کنید"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            area = Area.objects.get(id=int(areaId))
+        except Area.DoesNotExist:
+            return Response({
+                "status": "error",
+                "message": "منطقه انتخابی توسط سامانه پوشش داده نمیشود."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        restaurants = Restaurant.objects.filter(areas=area)
+        foods = Food.objects.filter(restaurant__in=restaurants, isAvailable=True)
+
+        foodList = []
+        for food in foods:
+            foodList.append({
+                "id": food.id,
+                "name": food.name,
+                "price": food.price,
+                "description": food.description,
+                "image": food.image,
+                "categoryId": food.category.id,
+                "restaurantId": food.restaurant.id,
+                "isAvailable": food.isAvailable,
+                "ratingScore": float(food.ratingScore),
+                "ratingTotalVoters": food.ratingTotalVoters,
+            })
+
+        return Response({
+            "status": "success",
+            "message": "غذاهای رستوران های نزدیک جستجو شد.",
+            "data": foodList
+        }, status=status.HTTP_200_OK)

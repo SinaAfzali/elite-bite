@@ -48,3 +48,5 @@ next-env.d.ts
 /api/*/*/__pycache__/*
 /api/*/migrations/*
 /api/db.sqlite3
+
+/api/public/images

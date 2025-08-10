@@ -1,0 +1,39 @@
+{
+  "api": "/api/food/nearest",
+  "method": "post",
+  "inputType": "application/json",
+  "input": {
+    "areaId": "integer (آیدی عددی منطقه، الزامی)"
+  },
+  "output": [
+    {
+      "status": "success",
+      "message": "غذاهای رستوران های نزدیک جستجو شد.",
+      "data": [
+        {
+          "id": "integer",
+          "name": "string",
+          "price": "integer",
+          "description": "string (اختیاری)",
+          "image": "string (آدرس تصویر، اختیاری)",
+          "categoryId": "integer",
+          "restaurantId": "integer",
+          "isAvailable": "boolean",
+          "ratingScore": "float",
+          "ratingTotalVoters": "integer"
+        }
+      ],
+      "statusCode": 200
+    },
+    {
+      "status": "error",
+      "message": "منطقه خود را مشخص کنید",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "منطقه انتخابی توسط سامانه پوشش داده نمیشود.",
+      "statusCode": 404
+    }
+  ]
+}
