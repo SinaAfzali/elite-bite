@@ -54,7 +54,7 @@ class AddFoodView(APIView):
             name=data["name"].strip(),
             price=int(data["price"]),
             description=data.get("description", "").strip(),
-            image=randomName,
+            image='/public/images/' + randomName,
             category=category,
             isAvailable=bool(data.get("isAvailable", False)),
             restaurant=restaurant

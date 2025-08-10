@@ -1,0 +1,18 @@
+{
+  "api": "/api/city/all",
+  "method": "get",
+  "inputType": "none",
+  "input": {},
+  "output": [
+    {
+      "status": "success",
+      "data": [
+        {
+          "id": "integer",
+          "name": "string"
+        }
+      ],
+      "statusCode": 200
+    }
+  ]
+}

@@ -3,20 +3,64 @@
   "method": "post",
   "inputType": "multipart/form-data",
   "input": {
-    "name": "string (الزامی)",
-    "price": "number (الزامی)",
+    "name": "string (حداکثر 100 کاراکتر، الزامی)",
+    "price": "integer (بزرگ‌تر یا مساوی صفر، الزامی)",
     "description": "string (اختیاری)",
-    "category": "string (اختیاری)",
-    "image": "file (jpg/jpeg/png - اختیاری)"
+    "image": "file (jpg/jpeg/png - حداکثر 1MB، اختیاری)",
+    "category": "integer (آیدی عددی دسته‌بندی موجود، الزامی)",
+    "isAvailable": "boolean (True یا False، پیش‌فرض False)"
   },
-  "output": {
-    "status": "success | error",
-    "message": "string"
-  },
-  "errors": [
-    { "message": "نام غذا الزامی است.", "status": 400 },
-    { "message": "قیمت غذا الزامی است.", "status": 400 },
-    { "message": "قیمت باید عدد باشد.", "status": 400 },
-    { "message": "رستوران یافت نشد.", "status": 400 }
+  "output": [
+    {
+      "status": "success",
+      "message": "غذا با موفقیت اضافه شد.",
+      "foodId": "integer",
+      "statusCode": 201
+    },
+    {
+      "status": "unauthorized",
+      "message": "دسترسی غیرمجاز",
+      "statusCode": 401
+    },
+    {
+      "status": "error",
+      "message": "فیلد name الزامی است.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "فیلد price الزامی است.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "فیلد category الزامی است.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "دسته‌بندی مورد نظر یافت نشد.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "شما هنوز رستوران ثبت نکرده‌اید.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "تصویر ارسال نشده است.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "فرمت تصویر نامعتبر است. فقط jpg، jpeg و png مجاز هستند.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "حجم عکس نباید از یک مگابایت بیشتر باشد.",
+      "statusCode": 400
+    }
   ]
 }

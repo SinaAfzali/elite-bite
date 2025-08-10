@@ -1,4 +1,6 @@
 from django.db import models
+
+from City.models import City
 from restaurantManager.models import RestaurantManager
 
 class Restaurant(models.Model):
@@ -11,7 +13,7 @@ class Restaurant(models.Model):
     isActive = models.BooleanField(default=False)
     # اطلاعات تماس و مکان
     address = models.TextField()
-    city = models.CharField(max_length=100)
+    city = models.ForeignKey(City, on_delete=models.CASCADE)
     areas = models.CharField(max_length=100)
     areasPrices = models.CharField(max_length=100)
     phoneNumber = models.CharField(max_length=20)

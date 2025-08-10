@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+from City.models import City
 from restaurantManager.services import getRestaurantManager
 from services.Authorization import require_authorization_manager
 from services.ImageValidation import ImageValidation
@@ -45,7 +46,7 @@ class AddRestaurantView(APIView):
             description=data.get('description', '').strip(),
             image='/public/images/' + randomName,
             address=data['address'].strip(),
-            city=int(data['city']),
+            city=City.objects.get(id=int(data['city'])),
             areas=','.join(data.getlist('areas[]')),
             areasPrices=','.join([str(p) for p in data.getlist('areasPrices[]')]),
             phoneNumber=data['phoneNumber'].strip(),

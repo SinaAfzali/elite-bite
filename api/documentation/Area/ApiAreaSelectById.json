@@ -1,0 +1,29 @@
+{
+  "api": "/api/area/selectById",
+  "method": "get",
+  "inputType": "application/json",
+  "input": {
+    "cityId": "integer (آیدی عددی شهر، الزامی)"
+  },
+  "output": [
+    {
+      "status": "success",
+      "city": {
+        "id": "integer",
+        "name": "string"
+      },
+      "areas": [
+        {
+          "id": "integer",
+          "name": "string"
+        }
+      ],
+      "statusCode": 200
+    },
+    {
+      "status": "error",
+      "message": "شهر مورد نظر یافت نشد.",
+      "statusCode": 404
+    }
+  ]
+}

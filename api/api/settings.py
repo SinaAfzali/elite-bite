@@ -56,7 +56,9 @@ INSTALLED_APPS = [
     'notifications',
     'userVerification',
     'food',
-    'FoodCategory'
+    'FoodCategory',
+    'City',
+    'Area'
 ]
 
 MIDDLEWARE = [
