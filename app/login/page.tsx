@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import SignUpForm from '@/components/login/signUpForm';
 import SignInForm from '@/components/login/signInForm';
 import styles from '@/components/login/styles/login.module.css';
