@@ -17,7 +17,16 @@
           "isActive": "boolean",
           "startWorkHour": "integer (0-23)",
           "endWorkHour": "integer (0-23)",
-          "ratingAvg": "decimal"
+          "ratingAvg": "decimal",
+          "ratingCount": "integer (تعداد رأی‌ها)",
+          "cityName": "string (نام شهر)",
+          "cityId": "integer (آیدی شهر)",
+          "areas": [
+            {
+              "id": "integer (آیدی منطقه)",
+              "name": "string (نام منطقه)"
+            }
+          ]
         }
       ],
       "statusCode": 200

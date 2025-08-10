@@ -93,6 +93,7 @@ class GetNearestRestaurant(APIView):
 
         data = []
         for r in selectedRestaurants:
+            areas = r.areas.all()
             data.append({
                 "id": r.id,
                 "name": r.name,
@@ -100,7 +101,13 @@ class GetNearestRestaurant(APIView):
                 "isActive": r.isActive,
                 "startWorkHour":r.startWorkHour,
                 "endWorkHour": r.endWorkHour,
-                "ratingAvg": r.ratingAvg
+                "ratingAvg": r.ratingAvg,
+                "ratingCount": r.ratingCount,
+                "cityName": r.city.name,
+                "cityId": r.city.id,
+                "areas": [
+                    {"id": a.id, "name": a.name} for a in areas
+                ]
             })
 
         return Response({
