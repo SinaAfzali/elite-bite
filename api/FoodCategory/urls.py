@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import GetAllFoodCategory
+from .views import GetAllFoodCategoriesView
 
 urlpatterns = [
-    path('all', GetAllFoodCategory.as_view(), name='all-category'),
+    path('all', GetAllFoodCategoriesView.as_view(), name='all-category'),
 ]
