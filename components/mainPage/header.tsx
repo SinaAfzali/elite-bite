@@ -1,27 +1,67 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import API from '@/components/frontAPI/api'; // Adjust the import path as needed
 
-interface Locations {
-  [key: string]: string[];
+interface City {
+  id: number;
+  name: string;
+}
+
+interface Area {
+  id: number;
+  name: string;
 }
 
 const Header: React.FC = () => {
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedArea, setSelectedArea] = useState("");
+  const [cities, setCities] = useState<City[]>([]);
+  const [areas, setAreas] = useState<Area[]>([]);
+  const [selectedCityId, setSelectedCityId] = useState<number | "">("");
+  const [selectedAreaId, setSelectedAreaId] = useState<number | "">("");
+  const [locationButtonText, setLocationButtonText] = useState("مکان");
 
-  // Sample city and area data
-  const locations: Locations = {
-    تهران: ["شمیرانات", "تجریش", "نیاوران", "پاسداران", "ونک"],
-    شیراز: ["معالی آباد", "قدوسی", "ستارخان", "زرهی"],
-    اصفهان: ["چهارباغ", "جلفا", "سی و سه پل", "مرداویج"],
-    مشهد: ["احمدآباد", "وکیل آباد", "هفت تیر", "سجاد"],
+  useEffect(() => {
+    fetchCities();
+  }, []);
+
+  const fetchCities = async () => {
+    try {
+      const response = await API.getAllCities();
+      if (response.status === "success") {
+        setCities(response.data || []);
+      }
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+    }
+  };
+
+  const fetchAreas = async (cityId: number) => {
+    try {
+      console.log("Fetching areas for cityId:", cityId);
+      const response = await API.getAreasByCityId({ cityId });
+      console.log("API Response:", response);
+
+      if (response.status === "success") {
+        // Access areas directly from response (not response.data)
+        setAreas(response.areas || []);
+
+        // Also set the city name if needed
+        setSelectedCity(response.city.name);
+      } else {
+        console.error("API Error:", response.message);
+      }
+    } catch (error) {
+      console.error("Error fetching areas:", error);
+    }
   };
 
   const handleLocationSelect = (city: string, area: string) => {
     setSelectedCity(city);
     setSelectedArea(area);
+    setLocationButtonText(`${city}, ${area}`);
     setIsLocationModalOpen(false);
   };
 
@@ -839,7 +879,7 @@ const Header: React.FC = () => {
                   className="cart-button"
                   onClick={() => setIsLocationModalOpen(true)}
               >
-                مکان
+                {locationButtonText}
                 <img src="location.png" alt="Location" />
               </button>
             </div>
@@ -867,25 +907,35 @@ const Header: React.FC = () => {
               <div className="location-modal-content">
                 <h2>انتخاب مکان</h2>
                 <select
-                    value={selectedCity}
-                    onChange={(e) => setSelectedCity(e.target.value)}
+                    value={selectedCityId}
+                    onChange={(e) => {
+                      const id = e.target.value ? parseInt(e.target.value) : "";
+                      setSelectedCityId(id);
+                      setAreas([]);
+                      setSelectedAreaId("");
+                      if (id) {
+                        fetchAreas(id);
+                      }
+                    }}
                 >
                   <option value="">انتخاب شهر</option>
-                  {Object.keys(locations).map((city) => (
-                      <option key={city} value={city}>
-                        {city}
+                  {cities.map((city) => (
+                      <option key={city.id} value={city.id}>
+                        {city.name}
                       </option>
                   ))}
                 </select>
-                {selectedCity && (
+                {selectedCityId && (
                     <select
-                        value={selectedArea}
-                        onChange={(e) => setSelectedArea(e.target.value)}
+                        value={selectedAreaId}
+                        onChange={(e) => {
+                          setSelectedAreaId(e.target.value ? parseInt(e.target.value) : "");
+                        }}
                     >
                       <option value="">انتخاب منطقه</option>
-                      {locations[selectedCity].map((area) => (
-                          <option key={area} value={area}>
-                            {area}
+                      {areas.map((area) => (
+                          <option key={area.id} value={area.id}>
+                            {area.name}
                           </option>
                       ))}
                     </select>
@@ -893,12 +943,14 @@ const Header: React.FC = () => {
                 <div className="location-modal-buttons">
                   <button
                       className="confirm-button"
-                      onClick={() =>
-                          selectedCity &&
-                          selectedArea &&
-                          handleLocationSelect(selectedCity, selectedArea)
-                      }
-                      disabled={!selectedCity || !selectedArea}
+                      onClick={() => {
+                        const cityName = cities.find((c) => c.id === selectedCityId)?.name || "";
+                        const areaName = areas.find((a) => a.id === selectedAreaId)?.name || "";
+                        if (cityName && areaName) {
+                          handleLocationSelect(cityName, areaName);
+                        }
+                      }}
+                      disabled={!selectedCityId || !selectedAreaId}
                   >
                     تأیید
                   </button>

@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import styles from './styles/login.module.css';
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import API from "@/components/frontAPI/api";
-import {toast} from "sonner";
+import { toast } from "sonner";
 
 interface SignUpFormProps {
     userType: 'customer' | 'restaurant' | null;
@@ -32,38 +32,22 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isCodeSent, setIsCodeSent] = useState(false);
+    const [code, setCode] = useState('');
     const router = useRouter();
 
-    const handleSignUp = async () => {
-        if (!userType) {
-            return;
-        }
-        try {
-            return await API[
-                userType === 'customer' ? 'customerSignupCode' : 'restaurantSignupCode'
-                ]({firstName, lastName, email});
-        } catch (error) {
-            // Errors are handled in SignUpForm
-            console.log(error);
-            return {status: 'error', message: 'خطا در ارتباط با سرور'};
-        }
-    };
-
-    const handleFormSubmit = async (e: React.FormEvent) => {
+    const handleSendCode = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!userType) {
             setErrorMessage('لطفاً نوع حساب کاربری را انتخاب کنید.');
-            setSuccessMessage('');
             return;
         }
         if (!firstName.trim() || !lastName.trim()) {
             setErrorMessage('نام و نام خانوادگی الزامی است.');
-            setSuccessMessage('');
             return;
         }
         if (!email.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
             setErrorMessage('لطفاً یک ایمیل معتبر وارد کنید.');
-            setSuccessMessage('');
             return;
         }
 
@@ -72,25 +56,71 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
         setSuccessMessage('');
 
         try {
-            const res = await handleSignUp();
-            if (res?.status === 'success') {
-                toast.success(res?.message || "کد تائید با موفقیت به ایمیل شما ارسال شد.");
-                router.push(
-                    `/sms/verify?email=${encodeURIComponent(email)}&type=${encodeURIComponent(userType)}&action=signup`
-                );
-            }else{
-                toast.error(res?.message || "خطا در ارتباط با سرور");
+            const apiCall = userType === 'customer' ? API.customerSignupCode : API.restaurantSignupCode;
+            const res = await apiCall({ firstName, lastName, email });
+
+            if (res.status === 'success') {
+                toast.success(res.message || "کد تائید با موفقیت به ایمیل شما ارسال شد.");
+                setIsCodeSent(true);
+            } else {
+                toast.error(res.message || "خطا در ارتباط با سرور");
+                setErrorMessage(res.message || "خطا در ارتباط با سرور");
             }
-        } catch {
-        //
+        } catch (err) {
+            console.error('Signup code error:', err);
+            toast.error("خطا در ارتباط با سرور");
+            setErrorMessage("خطا در ارتباط با سرور");
         } finally {
             setIsLoading(false);
         }
     };
 
+    const handleVerifyCode = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!code) {
+            setErrorMessage('لطفاً کد تأیید را وارد کنید.');
+            return;
+        }
+
+        setIsLoading(true);
+        setErrorMessage('');
+        setSuccessMessage('');
+
+        try {
+            const apiCall = userType === 'customer' ? API.customerSignupVerify : API.restaurantSignupVerify;
+            const res = await apiCall({ email, code });
+
+            if (res.status === 'success') {
+                toast.success(res.message || "ثبت‌نام با موفقیت انجام شد.");
+                // Redirect user to the login page or dashboard
+                router.push(userType === 'customer' ? '/customer/dashboard' : '/dashboard/restaurant');
+            } else {
+                toast.error(res.message || "کد وارد شده نامعتبر است.");
+                setErrorMessage(res.message || "کد وارد شده نامعتبر است.");
+            }
+        } catch (err) {
+            console.error('Verification error:', err);
+            toast.error("خطا در ارتباط با سرور");
+            setErrorMessage("خطا در ارتباط با سرور");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleFormReturn = () => {
+        setUserType(null);
+        setFirstName('');
+        setLastName('');
+        setEmail('');
+        setErrorMessage('');
+        setSuccessMessage('');
+        setIsCodeSent(false);
+        setCode('');
+    };
+
     return (
         <div className={`${styles['form-container']} ${styles['sign-up-container']}`}>
-            <form onSubmit={handleFormSubmit}>
+            <form onSubmit={isCodeSent ? handleVerifyCode : handleSendCode}>
                 <h1 className={styles.title}>
                     {userType ? `ثبت‌نام ${userType === 'customer' ? 'مشتری' : 'رستوران'}` : 'ثبت‌نام'}
                 </h1>
@@ -117,46 +147,75 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
                     </div>
                 ) : (
                     <>
-                        <input
-                            type="text"
-                            placeholder="نام"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            className={styles.input}
-                            required
-                        />
-                        <input
-                            type="text"
-                            placeholder="نام خانوادگی"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                            className={styles.input}
-                            required
-                        />
-                        <input
-                            type="email"
-                            placeholder="ایمیل"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className={styles.input}
-                            required
-                        />
+                        {!isCodeSent ? (
+                            <>
+                                <input
+                                    type="text"
+                                    placeholder="نام"
+                                    value={firstName}
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                    className={styles.input}
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="نام خانوادگی"
+                                    value={lastName}
+                                    onChange={(e) => setLastName(e.target.value)}
+                                    className={styles.input}
+                                    required
+                                />
+                                <input
+                                    type="email"
+                                    placeholder="ایمیل"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className={styles.input}
+                                    required
+                                />
+                                <button
+                                    type="submit"
+                                    className={styles['primary-button']}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? 'در حال ارسال...' : 'ارسال کد'}
+                                </button>
+                                <button
+                                    type="button"
+                                    className={styles['return-button']}
+                                    onClick={handleFormReturn}
+                                >
+                                    بازگشت
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <p className={styles['success-message']}>کد تأیید به ایمیل شما ارسال شد.</p>
+                                <input
+                                    type="text"
+                                    placeholder="کد تأیید"
+                                    value={code}
+                                    onChange={(e) => setCode(e.target.value)}
+                                    className={styles.input}
+                                    required
+                                />
+                                <button
+                                    type="submit"
+                                    className={styles['primary-button']}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? 'در حال تأیید...' : 'تأیید کد'}
+                                </button>
+                                <button
+                                    type="button"
+                                    className={styles['return-button']}
+                                    onClick={handleFormReturn}
+                                >
+                                    بازگشت
+                                </button>
+                            </>
+                        )}
                         {errorMessage && <span className={styles.error}>{errorMessage}</span>}
-                        {successMessage && <span className={styles.success}>{successMessage}</span>}
-                        <button
-                            type="submit"
-                            className={styles['primary-button']}
-                            disabled={isLoading}
-                        >
-                            {isLoading ? 'در حال ارسال...' : 'ارسال کد'}
-                        </button>
-                        <button
-                            type="button"
-                            className={styles['return-button']}
-                            onClick={handleReturn}
-                        >
-                            بازگشت
-                        </button>
                     </>
                 )}
             </form>
