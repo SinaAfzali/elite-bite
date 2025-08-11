@@ -1,0 +1,49 @@
+{
+  "api": "/api/restaurant/filter/price",
+  "method": "post",
+  "inputType": "application/json",
+  "input": {
+    "areaId": "integer (اختیاری، آیدی منطقه برای فیلتر رستوران‌ها)",
+    "priceOrder": "string (اختیاری، 'asc' برای صعودی، 'desc' برای نزولی، پیش‌فرض 'asc')",
+    "minPrice": "float (اختیاری، حداقل قیمت غذا)",
+    "maxPrice": "float (اختیاری، حداکثر قیمت غذا)"
+  },
+  "output": [
+    {
+      "status": "success",
+      "message": "رستوران‌ها بر اساس قیمت غذا فیلتر و مرتب شدند.",
+      "data": [
+        {
+          "id": "integer",
+          "name": "string",
+          "description": "string",
+          "isActive": "boolean",
+          "startWorkHour": "integer (0-23)",
+          "endWorkHour": "integer (0-23)",
+          "ratingAvg": "decimal",
+          "ratingCount": "integer",
+          "cityName": "string",
+          "cityId": "integer",
+          "areas": [
+            {
+              "id": "integer",
+              "name": "string"
+            }
+          ],
+          "minFoodPrice": "float (کمترین یا بیشترین قیمت غذای داخل بازه)"
+        }
+      ],
+      "statusCode": 200
+    },
+    {
+      "status": "error",
+      "message": "minPrice باید عدد باشد.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "maxPrice باید عدد باشد.",
+      "statusCode": 400
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "api": "/api/food/filter/category",
+  "method": "post",
+  "inputType": "application/json",
+  "input": {
+    "areaId": "integer (اختیاری)",
+    "categoryId": "integer (الزامی)"
+  },
+  "output": [
+    {
+      "status": "success",
+      "message": "غذاهای دسته‌بندی شده جستجو شدند.",
+      "data": [
+        {
+          "id": "integer",
+          "name": "string",
+          "price": "integer",
+          "description": "string (اختیاری)",
+          "image": "string (آدرس تصویر، اختیاری)",
+          "categoryId": "integer",
+          "categoryName": "string",
+          "restaurantId": "integer",
+          "restaurantName": "string",
+          "isAvailable": "boolean",
+          "ratingScore": "float",
+          "ratingTotalVoters": "integer"
+        }
+      ],
+      "statusCode": 200
+    },
+    {
+      "status": "error",
+      "message": "آیدی دسته‌بندی غذا را وارد کنید.",
+      "statusCode": 400
+    }
+  ]
+}

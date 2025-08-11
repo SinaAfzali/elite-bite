@@ -1,14 +1,14 @@
 {
-  "api": "/api/restaurant/nearest",
+  "api": "/api/restaurant/filter/rating",
   "method": "post",
   "inputType": "application/json",
   "input": {
-    "areaId": "integer (آیدی عددی منطقه، اختیاری)"
+    "areaId": "integer (اختیاری، آیدی عددی منطقه)"
   },
   "output": [
     {
       "status": "success",
-      "message": "نزدیک ترین رستوران ها جستجو شد.",
+      "message": "رستوران‌ها بر اساس امتیاز مرتب شدند.",
       "data": [
         {
           "id": "integer",
@@ -26,14 +26,11 @@
               "id": "integer (آیدی منطقه)",
               "name": "string (نام منطقه)"
             }
-          ]
+          ],
+          "deliveryFeeBase": "decimal (هزینه پایه ارسال)"
         }
       ],
       "statusCode": 200
     }
-  ],
-  "notes": [
-    "اگر 'areaId' ارسال نشود یا منطقه‌ای با آن آیدی یافت نشود، 100 رستوران اول دیتابیس بازگردانده می‌شود.",
-    "خطاهای 400 و 404 حذف شده‌اند و در هر دو حالت فوق پاسخ موفق همراه با داده‌های رستوران‌ها داده می‌شود."
   ]
 }

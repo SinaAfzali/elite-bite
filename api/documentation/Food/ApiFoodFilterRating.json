@@ -1,0 +1,31 @@
+{
+  "api": "/api/food/filter/rating",
+  "method": "post",
+  "inputType": "application/json",
+  "input": {
+    "areaId": "integer (اختیاری، آیدی منطقه برای فیلتر غذاها)"
+  },
+  "output": [
+    {
+      "status": "success",
+      "message": "غذاهای برتر بر اساس امتیاز جستجو شدند.",
+      "data": [
+        {
+          "id": "integer",
+          "name": "string",
+          "price": "integer",
+          "description": "string (اختیاری)",
+          "image": "string (آدرس تصویر، اختیاری)",
+          "categoryId": "integer",
+          "categoryName": "string",
+          "restaurantId": "integer",
+          "restaurantName": "string",
+          "isAvailable": "boolean",
+          "ratingScore": "float",
+          "ratingTotalVoters": "integer"
+        }
+      ],
+      "statusCode": 200
+    }
+  ]
+}

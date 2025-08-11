@@ -1,0 +1,34 @@
+{
+  "api": "/api/food/filter/price",
+  "method": "post",
+  "inputType": "application/json",
+  "input": {
+    "areaId": "integer (اختیاری)",
+    "minPrice": "integer (اختیاری)",
+    "maxPrice": "integer (اختیاری)",
+    "priceOrder": "string (اختیاری، 'asc' یا 'desc' برای ترتیب قیمت، پیش‌فرض 'asc')"
+  },
+  "output": [
+    {
+      "status": "success",
+      "message": "غذاها بر اساس بازه قیمت جستجو شدند.",
+      "data": [
+        {
+          "id": "integer",
+          "name": "string",
+          "price": "integer",
+          "description": "string (اختیاری)",
+          "image": "string (آدرس تصویر، اختیاری)",
+          "categoryId": "integer",
+          "categoryName": "string",
+          "restaurantId": "integer",
+          "restaurantName": "string",
+          "isAvailable": "boolean",
+          "ratingScore": "float",
+          "ratingTotalVoters": "integer"
+        }
+      ],
+      "statusCode": 200
+    }
+  ]
+}

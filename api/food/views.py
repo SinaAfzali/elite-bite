@@ -111,3 +111,139 @@ class GetFoodsByAreaView(APIView):
             "message": "غذاهای رستوران های نزدیک جستجو شد.",
             "data": foodList
         }, status=status.HTTP_200_OK)
+
+
+class FilterFoodsByRating(APIView):
+    def post(self, request):
+        areaId = request.data.get('areaId')
+
+        foods = Food.objects.filter(isAvailable=True)
+        if areaId:
+            try:
+                area = Area.objects.get(id=int(areaId))
+                restaurants = Restaurant.objects.filter(areas=area)
+                foods = foods.filter(restaurant__in=restaurants)
+            except Area.DoesNotExist:
+                # اگر منطقه یافت نشد، روی همه غذاها کار کن
+                pass
+
+        foods = foods.order_by('-ratingScore')[:100]
+
+        data = []
+        for food in foods:
+            data.append({
+                "id": food.id,
+                "name": food.name,
+                "price": food.price,
+                "description": food.description,
+                "image": food.image,
+                "categoryId": food.category.id,
+                "categoryName": food.category.name,
+                "restaurantId": food.restaurant.id,
+                "restaurantName": food.restaurant.name,
+                "isAvailable": food.isAvailable,
+                "ratingScore": float(food.ratingScore),
+                "ratingTotalVoters": food.ratingTotalVoters,
+            })
+
+        return Response({
+            "status": "success",
+            "message": "غذاهای برتر بر اساس امتیاز جستجو شدند.",
+            "data": data
+        }, status=status.HTTP_200_OK)
+
+
+class FilterFoodsByCategory(APIView):
+    def post(self, request):
+        areaId = request.data.get('areaId')
+        categoryId = request.data.get('categoryId')
+
+        if not categoryId:
+            return Response({
+                "status": "error",
+                "message": "آیدی دسته‌بندی غذا را وارد کنید."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        foods = Food.objects.filter(isAvailable=True, category_id=categoryId)
+        if areaId:
+            try:
+                area = Area.objects.get(id=int(areaId))
+                restaurants = Restaurant.objects.filter(areas=area)
+                foods = foods.filter(restaurant__in=restaurants)
+            except Area.DoesNotExist:
+                # اگر منطقه یافت نشد، روی همه غذاها فیلتر دسته‌بندی بزن
+                pass
+
+        data = []
+        for food in foods:
+            data.append({
+                "id": food.id,
+                "name": food.name,
+                "price": food.price,
+                "description": food.description,
+                "image": food.image,
+                "categoryId": food.category.id,
+                "categoryName": food.category.name,
+                "restaurantId": food.restaurant.id,
+                "restaurantName": food.restaurant.name,
+                "isAvailable": food.isAvailable,
+                "ratingScore": float(food.ratingScore),
+                "ratingTotalVoters": food.ratingTotalVoters,
+            })
+
+        return Response({
+            "status": "success",
+            "message": "غذاهای دسته‌بندی شده جستجو شدند.",
+            "data": data
+        }, status=status.HTTP_200_OK)
+
+
+class FilterFoodsByPrice(APIView):
+    def post(self, request):
+        areaId = request.data.get('areaId')
+        priceOrder = request.data.get('priceOrder', 'asc')  # پیش‌فرض صعودی
+        minPrice = request.data.get('minPrice')
+        maxPrice = request.data.get('maxPrice')
+
+        foods = Food.objects.filter(isAvailable=True)
+
+        if areaId:
+            try:
+                area = Area.objects.get(id=int(areaId))
+                restaurants = Restaurant.objects.filter(areas=area)
+                foods = foods.filter(restaurant__in=restaurants)
+            except Area.DoesNotExist:
+                pass
+
+        if minPrice is not None:
+            foods = foods.filter(price__gte=minPrice)
+        if maxPrice is not None:
+            foods = foods.filter(price__lte=maxPrice)
+
+        if priceOrder == "desc":
+            foods = foods.order_by("price")
+        else:
+            foods = foods.order_by("price")
+
+        data = []
+        for food in foods:
+            data.append({
+                "id": food.id,
+                "name": food.name,
+                "price": food.price,
+                "description": food.description,
+                "image": food.image,
+                "categoryId": food.category.id,
+                "categoryName": food.category.name,
+                "restaurantId": food.restaurant.id,
+                "restaurantName": food.restaurant.name,
+                "isAvailable": food.isAvailable,
+                "ratingScore": float(food.ratingScore),
+                "ratingTotalVoters": food.ratingTotalVoters,
+            })
+
+        return Response({
+            "status": "success",
+            "message": "غذاها بر اساس بازه قیمت جستجو شدند.",
+            "data": data
+        }, status=status.HTTP_200_OK)

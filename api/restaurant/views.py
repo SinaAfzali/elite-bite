@@ -1,8 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
-import restaurant
+from django.db.models import Min, Max, Q
 from Area.models import Area
 from City.models import City
 from restaurantManager.services import getRestaurantManager
@@ -76,20 +75,13 @@ class GetNearestRestaurant(APIView):
         areaId = request.data.get('areaId')
 
         if not areaId:
-            return Response({
-                "status": "error",
-                "message": "لطفا منطقه را مشخص کنید."
-            }, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            area = Area.objects.get(id=int(areaId))
-        except Area.DoesNotExist:
-            return Response({
-                "status": "error",
-                "message": "منطقه ای که انتخاب کردید توسط سامانه پوشش داده نمیشود."
-            }, status=status.HTTP_404_NOT_FOUND)
-
-        selectedRestaurants = Restaurant.objects.filter(areas=area)
+            selectedRestaurants = Restaurant.objects.all()[:100]
+        else:
+            try:
+                area = Area.objects.get(id=int(areaId))
+                selectedRestaurants = Restaurant.objects.filter(areas=area)
+            except Area.DoesNotExist:
+                selectedRestaurants = Restaurant.objects.all()[:100]
 
         data = []
         for r in selectedRestaurants:
@@ -99,7 +91,7 @@ class GetNearestRestaurant(APIView):
                 "name": r.name,
                 "description": r.description,
                 "isActive": r.isActive,
-                "startWorkHour":r.startWorkHour,
+                "startWorkHour": r.startWorkHour,
                 "endWorkHour": r.endWorkHour,
                 "ratingAvg": r.ratingAvg,
                 "ratingCount": r.ratingCount,
@@ -113,5 +105,167 @@ class GetNearestRestaurant(APIView):
         return Response({
             "status": "success",
             "message": "نزدیک ترین رستوران ها جستجو شد.",
+            "data": data
+        }, status=status.HTTP_200_OK)
+
+
+class GetRestaurantsByRating(APIView):
+    def post(self, request):
+        areaId = request.data.get('areaId')
+
+        if areaId:
+            try:
+                area = Area.objects.get(id=int(areaId))
+                restaurants = Restaurant.objects.filter(areas=area)
+            except Area.DoesNotExist:
+                restaurants = Restaurant.objects.all()
+        else:
+            restaurants = Restaurant.objects.all()
+
+        restaurants = restaurants.order_by('-ratingAvg')[:100]
+
+        data = []
+        for r in restaurants:
+            areas = r.areas.all()
+            data.append({
+                "id": r.id,
+                "name": r.name,
+                "description": r.description,
+                "isActive": r.isActive,
+                "startWorkHour": r.startWorkHour,
+                "endWorkHour": r.endWorkHour,
+                "ratingAvg": r.ratingAvg,
+                "ratingCount": r.ratingCount,
+                "cityName": r.city.name,
+                "cityId": r.city.id,
+                "areas": [{"id": a.id, "name": a.name} for a in areas],
+                "deliveryFeeBase": r.deliveryFeeBase
+            })
+
+        return Response({
+            "status": "success",
+            "message": "رستوران‌ها بر اساس امتیاز مرتب شدند.",
+            "data": data
+        }, status=status.HTTP_200_OK)
+
+
+
+class GetRestaurantsByPrice(APIView):
+    def post(self, request):
+        areaId = request.data.get('areaId')
+        priceOrder = request.data.get('priceOrder', 'asc')  # 'asc' یا 'desc'
+        minPrice = request.data.get('minPrice')
+        maxPrice = request.data.get('maxPrice')
+
+        # فیلتر رستوران‌ها براساس منطقه (اگر ارسال شده)
+        if areaId:
+            try:
+                area = Area.objects.get(id=int(areaId))
+                restaurants = Restaurant.objects.filter(areas=area)
+            except Area.DoesNotExist:
+                # اگر منطقه یافت نشد، روی همه رستوران‌ها ادامه بده
+                restaurants = Restaurant.objects.all()
+        else:
+            restaurants = Restaurant.objects.all()
+
+        # فیلتر غذاها بر اساس قیمت
+        food_filter = Q()
+        if minPrice is not None:
+            try:
+                minPrice = float(minPrice)
+                food_filter &= Q(price__gte=minPrice)
+            except ValueError:
+                return Response({
+                    "status": "error",
+                    "message": "minPrice باید عدد باشد."
+                }, status=status.HTTP_400_BAD_REQUEST)
+        if maxPrice is not None:
+            try:
+                maxPrice = float(maxPrice)
+                food_filter &= Q(price__lte=maxPrice)
+            except ValueError:
+                return Response({
+                    "status": "error",
+                    "message": "maxPrice باید عدد باشد."
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+        # فقط رستوران‌هایی که حداقل یک غذا با قیمت در بازه دارند
+        restaurants = restaurants.filter(food__isAvailable=True).filter(food_filter).distinct()
+
+        # به ازای هر رستوران کمترین یا بیشترین قیمت غذای داخل بازه را می‌گیریم برای مرتب‌سازی
+        if priceOrder == 'desc':
+            restaurants = restaurants.annotate(price=Max('food__price')).order_by('-price')
+        else:
+            restaurants = restaurants.annotate(price=Min('food__price')).order_by('price')
+
+        data = []
+        for r in restaurants:
+            areas = r.areas.all()
+            data.append({
+                "id": r.id,
+                "name": r.name,
+                "description": r.description,
+                "isActive": r.isActive,
+                "startWorkHour": r.startWorkHour,
+                "endWorkHour": r.endWorkHour,
+                "ratingAvg": r.ratingAvg,
+                "ratingCount": r.ratingCount,
+                "cityName": r.city.name,
+                "cityId": r.city.id,
+                "areas": [{"id": a.id, "name": a.name} for a in areas],
+                "minFoodPrice": r.price  # قیمت کمینه یا بیشینه غذای داخل بازه
+            })
+
+        return Response({
+            "status": "success",
+            "message": "رستوران‌ها بر اساس قیمت غذا فیلتر و مرتب شدند.",
+            "data": data
+        }, status=status.HTTP_200_OK)
+
+
+class GetRestaurantsByFoodCategory(APIView):
+    def post(self, request):
+        areaId = request.data.get('areaId')
+        foodCategoryId = request.data.get('foodCategoryId')
+
+        if not foodCategoryId:
+            return Response({
+                "status": "error",
+                "message": "آیدی دسته‌بندی غذا ارسال نشده است."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        if areaId:
+            try:
+                area = Area.objects.get(id=int(areaId))
+                restaurants = Restaurant.objects.filter(areas=area)
+            except Area.DoesNotExist:
+                restaurants = Restaurant.objects.all()
+        else:
+            restaurants = Restaurant.objects.all()
+
+        # فیلتر رستوران‌هایی که حداقل یک غذا با این دسته دارند
+        restaurants = restaurants.filter(food__category_id=foodCategoryId).distinct()
+
+        data = []
+        for r in restaurants:
+            areas = r.areas.all()
+            data.append({
+                "id": r.id,
+                "name": r.name,
+                "description": r.description,
+                "isActive": r.isActive,
+                "startWorkHour": r.startWorkHour,
+                "endWorkHour": r.endWorkHour,
+                "ratingAvg": r.ratingAvg,
+                "ratingCount": r.ratingCount,
+                "cityName": r.city.name,
+                "cityId": r.city.id,
+                "areas": [{"id": a.id, "name": a.name} for a in areas],
+                "deliveryFeeBase": r.deliveryFeeBase
+            })
+
+        return Response({
+            "status": "success",
+            "message": "رستوران‌ها بر اساس دسته‌بندی غذا فیلتر شدند.",
             "data": data
         }, status=status.HTTP_200_OK)
