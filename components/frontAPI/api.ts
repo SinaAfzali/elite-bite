@@ -45,6 +45,23 @@ interface ApiResponse<T = never> {
     data?: T;
 }
 
+interface City {
+    id: number;
+    name: string;
+}
+
+interface Area {
+    id: number;
+    name: string;
+}
+
+interface AreaResponse {
+    message: string;
+    status: string;
+    city: City;
+    areas: Area[];
+}
+
 class API {
     static customerSignupCode(data: {
         firstName: string;
@@ -106,6 +123,18 @@ class API {
     static restaurantLoginVerify(data: { email: string; code: string }) {
         return postJson<{ email: string; code: string }, ApiResponse>(
             '/api/restaurantManager/login/verify',
+            data
+        );
+    }
+
+    static getAllCities() {
+        return getData<ApiResponse<City[]>>('/api/city/all');
+    }
+
+
+    static getAreasByCityId(data: { cityId: number }) {
+        return postJson<{ cityId: number }, AreaResponse>(
+            '/api/area/selectById',
             data
         );
     }
