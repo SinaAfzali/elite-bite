@@ -92,7 +92,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
 
             if (res.status === 'success') {
                 toast.success(res.message || "ثبت‌نام با موفقیت انجام شد.");
-                // Redirect user to the login page or dashboard
+                // Redirect user to the login page or restaurantManager
                 router.push(userType === 'customer' ? '/customer/dashboard' : '/dashboard/restaurant');
             } else {
                 toast.error(res.message || "کد وارد شده نامعتبر است.");

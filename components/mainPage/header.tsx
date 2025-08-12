@@ -1,7 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import API from '@/components/frontAPI/api'; // Adjust the import path as needed
+import { useRouter } from "next/navigation";
+import API, { getData } from '@/components/frontAPI/api';
 import './header.css';
 
 interface City {
@@ -15,18 +16,55 @@ interface Area {
 }
 
 const Header: React.FC = () => {
+  const router = useRouter();
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
-  const [selectedCity, setSelectedCity] = useState("");
-  const [selectedArea, setSelectedArea] = useState("");
+  const [, setSelectedCity] = useState("");
+  const [, setSelectedArea] = useState("");
   const [cities, setCities] = useState<City[]>([]);
   const [areas, setAreas] = useState<Area[]>([]);
   const [selectedCityId, setSelectedCityId] = useState<number | "">("");
   const [selectedAreaId, setSelectedAreaId] = useState<number | "">("");
   const [locationButtonText, setLocationButtonText] = useState("مکان");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showAuthDropdown, setShowAuthDropdown] = useState(false);
 
   useEffect(() => {
     fetchCities();
+    checkLoginStatus();
   }, []);
+
+  const checkLoginStatus = async () => {
+    try {
+      const response = await getData<{ status: string; isAdminLogin: boolean }>(
+          API.checkRestaurantManagerLogin
+      );
+      setIsLoggedIn(response.status === 'success' && response.isAdminLogin);
+    } catch (error) {
+      console.error("Error checking login status:", error);
+      setIsLoggedIn(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      // You'll need to implement a logout endpoint in your API
+      await getData(API.checkRestaurantManagerLogin + '/logout'); // Adjust this based on your actual logout endpoint
+      setIsLoggedIn(false);
+      setShowAuthDropdown(false);
+      router.push('/');
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
+
+  const handleDashboardClick = () => {
+    if (isLoggedIn) {
+      router.push('/restaurantManager'); // changed from '/dashboard/restaurant'
+    } else {
+      router.push('/login');
+    }
+    setShowAuthDropdown(false);
+  };
 
   const fetchCities = async () => {
     try {
@@ -68,15 +106,37 @@ const Header: React.FC = () => {
         <header className="header">
           <div className="header-content">
             <div className="buttons-container">
-              <Link href="/login" className="location-button">
-                ورود/ثبت‌نام
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
+              <div className="auth-dropdown-container">
+                <button
+                    className="location-button auth-button"
+                    onClick={() => setShowAuthDropdown(!showAuthDropdown)}
                 >
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                </svg>
-              </Link>
+                  {isLoggedIn ? 'خروج از حساب' : 'ورود/ثبت‌نام'}
+                  <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                  >
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                  </svg>
+                </button>
+                {showAuthDropdown && (
+                    <div className="auth-dropdown">
+                      {!isLoggedIn && (
+                          <Link href="/login" className="dropdown-item" onClick={() => setShowAuthDropdown(false)}>
+                            ورود/ثبت‌نام
+                          </Link>
+                      )}
+                      <button className="dropdown-item" onClick={handleDashboardClick}>
+                        داشبورد
+                      </button>
+                      {isLoggedIn && (
+                          <button className="dropdown-item" onClick={handleLogout}>
+                            خروج از حساب
+                          </button>
+                      )}
+                    </div>
+                )}
+              </div>
               <Link href="/cart" className="cart-button">
                 سبد خرید
                 <img src="cart.png" alt="Cart" />

@@ -102,6 +102,8 @@
     white-space: nowrap;
     box-shadow: 0 2px 8px rgba(0, 206, 203, 0.2);
     margin-right: 12px;
+    border: none;
+    cursor: pointer;
 }
 
 .location-button:hover, .cart-button:hover {
@@ -121,6 +123,58 @@
     align-items: center;
 }
 
+/* Auth Dropdown Styles */
+.auth-dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+.auth-button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.auth-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 160px;
+    margin-top: 8px;
+    overflow: hidden;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-item {
+    display: block;
+    padding: 10px 16px;
+    text-align: right;
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #1F2937;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.dropdown-item:hover {
+    background-color: #F8FAFC;
+    color: #00CECB;
+}
+
+/* Location Modal Styles */
 .location-modal {
     position: fixed;
     top: 0;
@@ -220,6 +274,7 @@
     background: #E5E7EB;
 }
 
+/* Hero Section Styles */
 .hero-section {
     position: relative;
     min-height: 950px;
@@ -317,18 +372,6 @@
 
 @keyframes fadeIn {
     to { opacity: 1; }
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-}
-
-.hero-text {
-    width: 40px;
-    height: 40px;
-    fill: #00CECB;
-    margin-bottom: 200px;
 }
 
 .hero-text h1 {
@@ -530,10 +573,6 @@
         padding: 10px 20px;
         font-size: 13px;
     }
-    .hero-text {
-        width: 35px;
-        height: 35px;
-    }
     .location-modal-content {
         max-width: 400px;
         padding: 20px;
@@ -644,10 +683,6 @@
         padding: 10px 18px;
         font-size: 12px;
     }
-    .hero-text {
-        width: 30px;
-        height: 30px;
-    }
     .location-modal-content {
         max-width: 90%;
         padding: 16px;
@@ -733,10 +768,6 @@
         padding: 8px 16px;
         font-size: 11px;
     }
-    .hero-text {
-        width: 25px;
-        height: 25px;
-    }
     .location-modal-content {
         max-width: 95%;
         padding: 12px;
@@ -819,10 +850,6 @@
     .hero-text .cta-button {
         padding: 7px 14px;
         font-size: 10px;
-    }
-    .hero-text {
-        width: 20px;
-        height: 20px;
     }
     .location-modal-content {
         max-width: 98%;
