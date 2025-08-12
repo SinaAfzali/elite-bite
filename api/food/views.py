@@ -49,6 +49,11 @@ class AddFoodView(APIView):
                 "status": "error",
                 "message": "شما هنوز رستوران ثبت نکرده‌اید."
             }, status=status.HTTP_400_BAD_REQUEST)
+        elif not restaurant.isVerified:
+            return Response({
+                "status": "error",
+                "message": "رستوران شما به تایید ادمین نرسیده است. بنابراین نمیتوانید غذا ثبت کنید."
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         randomName = uploadImage(image_file)
 
