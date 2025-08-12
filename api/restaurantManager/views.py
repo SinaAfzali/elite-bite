@@ -3,6 +3,8 @@ from django.utils import timezone
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+
+from restaurant.models import Restaurant
 from .models import RestaurantManager
 from userVerification.models import VerificationCode
 from customer.utilities import SendSignupCode
@@ -163,6 +165,23 @@ class CheckLoginView(APIView):
         if getRestaurantManager(request):
             return Response({'message': 'لاگین است.', 'status': 'success'},
                         status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'لاگین نیست.', 'status': 'unauthorized'},
+                            status=status.HTTP_401_UNAUTHORIZED)
+
+
+
+class GetInformation(APIView):
+    def get(self, request):
+        manager = getRestaurantManager(request)
+        if manager:
+            return Response({'message': 'اطلاعات مدیر رستوران ارسال شد.', 'status': 'success',
+                             'data' : {
+                                 'firstName': manager.firstName,
+                                 'lastName': manager.lastName,
+                                 'email': manager.email,
+                                 'hasRestaurant': Restaurant.objects.filter(owner=manager.id).exists(),
+                             }}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'لاگین نیست.', 'status': 'unauthorized'},
                             status=status.HTTP_401_UNAUTHORIZED)

@@ -269,3 +269,31 @@ class GetRestaurantsByFoodCategory(APIView):
             "message": "رستوران‌ها بر اساس دسته‌بندی غذا فیلتر شدند.",
             "data": data
         }, status=status.HTTP_200_OK)
+
+
+class GetRestaurantInfo(APIView):
+    def get(self, request):
+        manager = getRestaurantManager(request)
+        if manager:
+            restaurant = Restaurant.objects.get(owner=manager.id)
+            areas = restaurant.areas.all()
+            return Response({'message': 'اطلاعات رستوران ارسال شد.', 'status': 'success',
+                             'data': {
+                                'name': restaurant.name,
+                                 'description': restaurant.description,
+                                 'image': restaurant.image,
+                                 'registrationDate': restaurant.registrationDate,
+                                 'isActive': restaurant.isActive,
+                                 'startWorkHour': restaurant.startWorkHour,
+                                 'endWorkHour': restaurant.endWorkHour,
+                                 'ratingAvg': restaurant.ratingAvg,
+                                 'ratingCount': restaurant.ratingCount,
+                                 'cityName': restaurant.city.name,
+                                 'areas': [{"id": a.id, "name": a.name} for a in areas],
+                                 'phoneNumber': restaurant.phoneNumber,
+                                 'contactEmail': restaurant.contactEmail,
+                                 'isVerified': restaurant.isVerified,
+                             }}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'لاگین نیست.', 'status': 'unauthorized'},
+                            status=status.HTTP_401_UNAUTHORIZED)

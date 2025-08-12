@@ -1,0 +1,24 @@
+{
+  "api": "/api/restaurantManager/info",
+  "method": "get",
+  "inputType": "none",
+  "input": {},
+  "output": [
+    {
+      "status": "success",
+      "message": "اطلاعات مدیر رستوران ارسال شد.",
+      "data": {
+        "firstName": "string (نام مدیر)",
+        "lastName": "string (نام خانوادگی مدیر)",
+        "email": "string (ایمیل مدیر)",
+        "hasRestaurant": "boolean (آیا این مدیر رستورانی ثبت کرده یا نه)"
+      },
+      "statusCode": 200
+    },
+    {
+      "status": "unauthorized",
+      "message": "لاگین نیست.",
+      "statusCode": 401
+    }
+  ]
+}

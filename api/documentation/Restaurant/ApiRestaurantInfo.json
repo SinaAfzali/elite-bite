@@ -1,0 +1,39 @@
+{
+  "api": "/api/restaurant/info",
+  "method": "get",
+  "inputType": "none",
+  "input": {},
+  "output": [
+    {
+      "status": "success",
+      "message": "اطلاعات رستوران ارسال شد.",
+      "data": {
+        "name": "string (نام رستوران)",
+        "description": "string (توضیحات رستوران، اختیاری)",
+        "image": "string (آدرس تصویر، اختیاری)",
+        "registrationDate": "datetime (تاریخ ثبت)",
+        "isActive": "boolean (فعال بودن یا نبودن)",
+        "startWorkHour": "integer (0-23، ساعت شروع کار)",
+        "endWorkHour": "integer (0-23، ساعت پایان کار)",
+        "ratingAvg": "decimal (میانگین امتیاز)",
+        "ratingCount": "integer (تعداد رأی‌ها)",
+        "cityName": "string (نام شهر)",
+        "areas": [
+          {
+            "id": "integer (آیدی منطقه)",
+            "name": "string (نام منطقه)"
+          }
+        ],
+        "phoneNumber": "string (شماره تماس)",
+        "contactEmail": "string (ایمیل تماس، اختیاری)",
+        "isVerified": "boolean (آیا رستوران تایید شده است یا خیر)"
+      },
+      "statusCode": 200
+    },
+    {
+      "status": "unauthorized",
+      "message": "لاگین نیست.",
+      "statusCode": 401
+    }
+  ]
+}
