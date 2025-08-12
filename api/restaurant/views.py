@@ -297,3 +297,5 @@ class GetRestaurantInfo(APIView):
         else:
             return Response({'message': 'لاگین نیست.', 'status': 'unauthorized'},
                             status=status.HTTP_401_UNAUTHORIZED)
+
+

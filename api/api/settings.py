@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'restaurantManager',
     'restaurant',
     'menu',
-    'orders',
     'reviews',
     'subscriptions',
     'support',
@@ -58,7 +57,9 @@ INSTALLED_APPS = [
     'food',
     'FoodCategory',
     'City',
-    'Area'
+    'Area',
+    'order',
+    'payment'
 ]
 
 MIDDLEWARE = [

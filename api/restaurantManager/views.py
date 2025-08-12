@@ -7,7 +7,7 @@ from rest_framework import status
 from restaurant.models import Restaurant
 from .models import RestaurantManager
 from userVerification.models import VerificationCode
-from customer.utilities import SendSignupCode
+from customer.utilities import SendSignupCode, SendLoginCode
 from .services import getRestaurantManager
 
 
@@ -118,7 +118,7 @@ class LoginCodeView(APIView):
             return Response({'message': 'کد قبلاً ارسال شده و هنوز معتبر است.', 'status': 'success'},
                             status=status.HTTP_200_OK)
 
-        sent = SendSignupCode(email, "RestaurantManager")
+        sent = SendLoginCode(email, "RestaurantManager")
         if not sent:
             return Response({'message': 'ارسال کد با خطا مواجه شد.', 'status': 'error'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from .models import Customer
 from userVerification.models import VerificationCode
-from .utilities import SendSignupCode
+from .utilities import SendSignupCode, SendLoginCode
 
 
 class SignupCodeView(APIView):
@@ -120,7 +120,7 @@ class LoginCodeView(APIView):
             return Response({'message': 'کد ورود اخیراً ارسال شده و معتبر است.', 'status': 'success'},
                             status=status.HTTP_200_OK)
 
-        sent = SendSignupCode(email, "customer")
+        sent = SendLoginCode(email, "customer")
         if not sent:
             return Response({'message': 'مشکلی در ارسال کد بوجود آمده است.', 'status': 'error'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
