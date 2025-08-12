@@ -69,7 +69,7 @@ const SignInForm: React.FC = () => {
 
             if (response.status === 'success') {
                 setSuccessMessage(response.message || 'ورود با موفقیت انجام شد.');
-                // Redirect user to their dashboard after successful login
+                // Redirect user to their restaurantManager after successful login
                 if (userType === 'customer') {
                     router.push('/customer/dashboard');
                 } else {

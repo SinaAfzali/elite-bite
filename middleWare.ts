@@ -47,7 +47,7 @@ export async function middleware(req: NextRequest) {
     if (
         url.pathname.startsWith('/desktop/admin') ||
         url.pathname.startsWith('/mobile/admin') ||
-        url.pathname.startsWith('/dashboard/restaurant')
+        url.pathname.startsWith('/restaurantManager/restaurant')
     ) {
         const isAuthorized = await authorizationRestaurantManager();
         console.log(`RestaurantManager authorized: ${isAuthorized}`);
@@ -56,7 +56,7 @@ export async function middleware(req: NextRequest) {
             url.pathname = '/';
             return NextResponse.redirect(url);
         }
-    } else if (url.pathname.startsWith('/customer/dashboard')) {
+    } else if (url.pathname.startsWith('/customer/restaurantManager')) {
         const isAuthorized = await authorizationCustomer();
         console.log(`Customer authorized: ${isAuthorized}`);
         if (!isAuthorized) {
@@ -64,7 +64,7 @@ export async function middleware(req: NextRequest) {
             url.pathname = '/';
             return NextResponse.redirect(url);
         }
-    } else if (url.pathname === '/dashboard') {
+    } else if (url.pathname === '/restaurantManager') {
         const isRestaurantManager = await authorizationRestaurantManager();
         const isCustomer = await authorizationCustomer();
         console.log(`Dashboard access - RestaurantManager: ${isRestaurantManager}, Customer: ${isCustomer}`);
