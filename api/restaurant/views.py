@@ -4,6 +4,7 @@ from rest_framework import status
 from django.db.models import Min, Max, Q
 from Area.models import Area
 from City.models import City
+from food.models import Food
 from restaurantManager.services import getRestaurantManager
 from services.Authorization import require_authorization_manager
 from services.ImageValidation import ImageValidation
@@ -299,3 +300,54 @@ class GetRestaurantInfo(APIView):
                             status=status.HTTP_401_UNAUTHORIZED)
 
 
+class GetRestaurantWithFoods(APIView):
+    def get(self, request, restaurant_id):
+        try:
+            restaurant = Restaurant.objects.get(id=restaurant_id)
+        except Restaurant.DoesNotExist:
+            return Response({
+                "status": "error",
+                "message": "رستوران یافت نشد."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        # گرفتن غذاهای رستوران
+        foods = Food.objects.filter(restaurant=restaurant)
+
+        data = {
+            "id": restaurant.id,
+            "name": restaurant.name,
+            "description": restaurant.description,
+            "image": restaurant.image,
+            "registrationDate": restaurant.registrationDate,
+            "isActive": restaurant.isActive,
+            "startWorkHour": restaurant.startWorkHour,
+            "endWorkHour": restaurant.endWorkHour,
+            "ratingAvg": restaurant.ratingAvg,
+            "ratingCount": restaurant.ratingCount,
+            "cityName": restaurant.city.name,
+            "areas": [{"id": a.id, "name": a.name} for a in restaurant.areas.all()],
+            "phoneNumber": restaurant.phoneNumber,
+            "contactEmail": restaurant.contactEmail,
+            "isVerified": restaurant.isVerified,
+            "foods": [
+                {
+                    "id": f.id,
+                    "name": f.name,
+                    "price": f.price,
+                    "description": f.description,
+                    "image": f.image,
+                    "categoryId": f.category.id,
+                    "categoryName": f.category.name,
+                    "isAvailable": f.isAvailable,
+                    "ratingScore": f.ratingScore,
+                    "ratingTotalVoters": f.ratingTotalVoters
+                }
+                for f in foods
+            ]
+        }
+
+        return Response({
+            "status": "success",
+            "message": "اطلاعات رستوران و لیست غذاها ارسال شد.",
+            "data": data
+        }, status=status.HTTP_200_OK)
