@@ -1,9 +1,11 @@
-"use client";
+// Header.tsx
+"use client"
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import API, { getData } from '@/components/frontAPI/api';
 import './header.css';
+import { useAuthStore } from '@/components/login/authStore'; // Adjust path
 
 interface City {
   id: number;
@@ -25,46 +27,14 @@ const Header: React.FC = () => {
   const [selectedCityId, setSelectedCityId] = useState<number | "">("");
   const [selectedAreaId, setSelectedAreaId] = useState<number | "">("");
   const [locationButtonText, setLocationButtonText] = useState("مکان");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showAuthDropdown, setShowAuthDropdown] = useState(false);
+  const { isLoggedIn, userType, logout } = useAuthStore(); // Use store
 
   useEffect(() => {
     fetchCities();
-    checkLoginStatus();
+    // Removed checkLoginStatus() since API doesn't exist yet (would override to false)
+    // When API is implemented, add it back here to sync on mount
   }, []);
-
-  const checkLoginStatus = async () => {
-    try {
-      const response = await getData<{ status: string; isAdminLogin: boolean }>(
-          API.checkRestaurantManagerLogin
-      );
-      setIsLoggedIn(response.status === 'success' && response.isAdminLogin);
-    } catch (error) {
-      console.error("Error checking login status:", error);
-      setIsLoggedIn(false);
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      // You'll need to implement a logout endpoint in your API
-      await getData(API.checkRestaurantManagerLogin + '/logout'); // Adjust this based on your actual logout endpoint
-      setIsLoggedIn(false);
-      setShowAuthDropdown(false);
-      router.push('/');
-    } catch (error) {
-      console.error("Error during logout:", error);
-    }
-  };
-
-  const handleDashboardClick = () => {
-    if (isLoggedIn) {
-      router.push('/restaurantManager'); // changed from '/dashboard/restaurant'
-    } else {
-      router.push('/login');
-    }
-    setShowAuthDropdown(false);
-  };
 
   const fetchCities = async () => {
     try {
@@ -99,6 +69,23 @@ const Header: React.FC = () => {
     setSelectedArea(area);
     setLocationButtonText(`${city}, ${area}`);
     setIsLocationModalOpen(false);
+  };
+
+  const handleLogout = async () => {
+    await logout(); // Use store's logout (client-side + attempt API)
+    setShowAuthDropdown(false);
+    router.push('/');
+  };
+
+  const handleDashboardClick = () => {
+    if (isLoggedIn) {
+      // Route based on userType
+      const dashboardPath = userType === 'customer' ? '/customerDashboard' : '/restaurantManager';
+      router.push(dashboardPath);
+    } else {
+      router.push('/login');
+    }
+    setShowAuthDropdown(false);
   };
 
   return (

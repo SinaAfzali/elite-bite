@@ -1,9 +1,11 @@
+// SignInForm.tsx (or wherever it's located)
 "use client";
 
 import React, { useState } from 'react';
 import styles from './styles/login.module.css';
 import API from '@/components/frontAPI/api';
 import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/components/login/authStore'; // Adjust path
 
 const SignInForm: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -14,6 +16,7 @@ const SignInForm: React.FC = () => {
     const [isCodeSent, setIsCodeSent] = useState(false);
     const [code, setCode] = useState('');
     const router = useRouter();
+    const { setLoggedIn } = useAuthStore(); // Add this
 
     const handleSendCode = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -69,12 +72,8 @@ const SignInForm: React.FC = () => {
 
             if (response.status === 'success') {
                 setSuccessMessage(response.message || 'ورود با موفقیت انجام شد.');
-                // Redirect user to their restaurantManager after successful login
-                if (userType === 'customer') {
-                    router.push('/customer/dashboard');
-                } else {
-                    router.push('/dashboard/restaurant');
-                }
+                setLoggedIn(true, userType); // Set in Zustand (persists)
+                window.location.href = 'http://localhost:3000/';
             } else {
                 setErrorMessage(response.message || 'کد وارد شده نامعتبر است.');
             }

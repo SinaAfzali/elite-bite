@@ -1,10 +1,10 @@
 "use client";
 
-import RestaurantDashboard from '@/components/dashboard/restaurantDashboard';
+import RestaurantManager from '@/components/dashboard/restaurantManager';
 import React from "react";
 
 const RestaurantDashboardPage: React.FC = () => {
-    return <RestaurantDashboard />;
+    return <RestaurantManager />;
 };
 
 export default RestaurantDashboardPage;

@@ -1,3 +1,4 @@
+// SignUpForm.tsx (or wherever it's located)
 "use client";
 
 import React, { useState } from 'react';
@@ -5,6 +6,7 @@ import styles from './styles/login.module.css';
 import { useRouter } from "next/navigation";
 import API from "@/components/frontAPI/api";
 import { toast } from "sonner";
+import { useAuthStore } from '@/components/login/authStore'; // Adjust path
 
 interface SignUpFormProps {
     userType: 'customer' | 'restaurant' | null;
@@ -35,6 +37,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
     const [isCodeSent, setIsCodeSent] = useState(false);
     const [code, setCode] = useState('');
     const router = useRouter();
+    const { setLoggedIn } = useAuthStore(); // Add this
 
     const handleSendCode = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -92,8 +95,8 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
 
             if (res.status === 'success') {
                 toast.success(res.message || "ثبت‌نام با موفقیت انجام شد.");
-                // Redirect user to the login page or restaurantManager
-                router.push(userType === 'customer' ? '/customer/dashboard' : '/dashboard/restaurant');
+                setLoggedIn(true, userType); // Set in Zustand (persists)
+                window.location.href = 'http://localhost:3000/';
             } else {
                 toast.error(res.message || "کد وارد شده نامعتبر است.");
                 setErrorMessage(res.message || "کد وارد شده نامعتبر است.");
