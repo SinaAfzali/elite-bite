@@ -8,6 +8,7 @@
       "status": "success",
       "message": "اطلاعات رستوران ارسال شد.",
       "data": {
+        "id": "integer (آیدی رستوران)",
         "name": "string (نام رستوران)",
         "description": "string (توضیحات رستوران، اختیاری)",
         "image": "string (آدرس تصویر، اختیاری)",

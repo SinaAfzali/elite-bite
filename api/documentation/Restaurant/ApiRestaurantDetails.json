@@ -1,0 +1,64 @@
+{
+  "api": "/api/restaurant/details",
+  "method": "post",
+  "inputType": "application/json",
+  "input": {
+    "restaurantId": "integer (شناسه عددی رستوران، الزامی)"
+  },
+  "output": [
+    {
+      "status": "success",
+      "message": "اطلاعات رستوران و لیست غذاها ارسال شد.",
+      "data": {
+        "id": 1,
+        "name": "رستوران نمونه",
+        "description": "یک توضیح کوتاه",
+        "image": "url/to/image.jpg",
+        "registrationDate": "2025-08-12T10:00:00",
+        "isActive": true,
+        "startWorkHour": 8,
+        "endWorkHour": 23,
+        "ratingAvg": 4.5,
+        "ratingCount": 120,
+        "cityName": "تهران",
+        "areas": [
+          { "id": 1, "name": "منطقه 1" },
+          { "id": 2, "name": "منطقه 2" }
+        ],
+        "phoneNumber": "02112345678",
+        "contactEmail": "info@example.com",
+        "isVerified": true,
+        "foods": [
+          {
+            "id": 10,
+            "name": "پیتزا مخصوص",
+            "price": 250000,
+            "description": "توضیحات پیتزا",
+            "image": "url/to/pizza.jpg",
+            "category": "پیتزا",
+            "isAvailable": true,
+            "ratingScore": 4.8,
+            "ratingTotalVoters": 55
+          },
+          {
+            "id": 11,
+            "name": "کباب کوبیده",
+            "price": 180000,
+            "description": "دو سیخ کوبیده همراه با گوجه",
+            "image": "url/to/kabab.jpg",
+            "category": "غذای ایرانی",
+            "isAvailable": true,
+            "ratingScore": 4.7,
+            "ratingTotalVoters": 42
+          }
+        ]
+      },
+      "statusCode": 200
+    },
+    {
+      "status": "error",
+      "message": "رستوران یافت نشد.",
+      "statusCode": 404
+    }
+  ]
+}

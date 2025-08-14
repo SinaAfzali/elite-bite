@@ -283,7 +283,8 @@ class GetRestaurantInfo(APIView):
             areas = restaurant.areas.all()
             return Response({'message': 'اطلاعات رستوران ارسال شد.', 'status': 'success',
                              'data': {
-                                'name': restaurant.name,
+                                 "id": restaurant.id,
+                                 'name': restaurant.name,
                                  'description': restaurant.description,
                                  'image': restaurant.image,
                                  'registrationDate': restaurant.registrationDate,
@@ -317,17 +318,16 @@ class GetRestaurantInfo(APIView):
                             status=status.HTTP_401_UNAUTHORIZED)
 
 
-class GetRestaurantWithFoods(APIView):
-    def get(self, request, restaurant_id):
+class GetRestaurantDetails(APIView):
+    def post(self, request):
         try:
-            restaurant = Restaurant.objects.get(id=restaurant_id)
+            restaurant = Restaurant.objects.get(id=request.data['restaurantId'])
         except Restaurant.DoesNotExist:
             return Response({
                 "status": "error",
                 "message": "رستوران یافت نشد."
             }, status=status.HTTP_404_NOT_FOUND)
 
-        # گرفتن غذاهای رستوران
         foods = Food.objects.filter(restaurant=restaurant)
 
         data = {
@@ -353,11 +353,10 @@ class GetRestaurantWithFoods(APIView):
                     "price": f.price,
                     "description": f.description,
                     "image": f.image,
-                    "categoryId": f.category.id,
-                    "categoryName": f.category.name,
+                    "category": f.category.name if f.category else None,
                     "isAvailable": f.isAvailable,
-                    "ratingScore": f.ratingScore,
-                    "ratingTotalVoters": f.ratingTotalVoters
+                    "ratingScore": float(f.ratingScore),
+                    "ratingTotalVoters": f.ratingTotalVoters,
                 }
                 for f in foods
             ]
