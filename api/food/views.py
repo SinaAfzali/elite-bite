@@ -295,3 +295,40 @@ class GetFoodDetails(APIView):
             "message": "اطلاعات غذا ارسال شد.",
             "data": data
         }, status=status.HTTP_200_OK)
+
+
+class DeleteFood(APIView):
+    def post(self, request):
+        food_id = request.data.get("foodId")
+        if not food_id:
+            return Response(
+                {'status': 'error', 'message': 'پارامتر foodId الزامی است.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        manager = getRestaurantManager(request)
+        if not manager:
+            return Response(
+                {'status': 'error', 'message': 'احراز هویت انجام نشده است.'},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        try:
+            food = Food.objects.select_related('restaurant').get(id=food_id)
+        except Food.DoesNotExist:
+            return Response(
+                {'status': 'error', 'message': 'غذا یافت نشد.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        if food.restaurant.owner != manager:
+            return Response(
+                {'status': 'error', 'message': 'این غذا متعلق به رستوران شما نیست.'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        food.delete()
+        return Response(
+            {'status': 'success', 'message': 'غذا با موفقیت حذف شد.'},
+            status=status.HTTP_200_OK
+        )
