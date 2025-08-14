@@ -1,3 +1,4 @@
+// middleware.ts
 import { NextRequest, NextResponse } from 'next/server';
 import API, { getData } from '@/components/frontAPI/api';
 
@@ -5,7 +6,7 @@ export async function middleware(req: NextRequest) {
     const url = req.nextUrl.clone();
     console.log(`Middleware triggered for path: ${url.pathname}`);
 
-    // مسیرهای آزاد (نیازی به لاگین ندارند)
+    // Free routes (no login required)
     if (
         url.pathname.startsWith('/sms/verify') ||
         url.pathname.startsWith('/sms/code') ||
@@ -15,7 +16,7 @@ export async function middleware(req: NextRequest) {
         return NextResponse.next();
     }
 
-    // بررسی دسترسی برای مدیران رستوران
+    // Check restaurant manager authorization
     const authorizationRestaurantManager = async () => {
         try {
             const response = await getData<{ status: string; isAdminLogin: boolean }>(
@@ -29,7 +30,7 @@ export async function middleware(req: NextRequest) {
         }
     };
 
-    // بررسی دسترسی برای مشتری‌ها
+    // Check customer authorization
     const authorizationCustomer = async () => {
         try {
             const response = await getData<{ status: string; isCustomerLogin: boolean }>(
@@ -43,7 +44,7 @@ export async function middleware(req: NextRequest) {
         }
     };
 
-    // مسیرهای محافظت‌شده
+    // Protected routes
     if (
         url.pathname.startsWith('/desktop/admin') ||
         url.pathname.startsWith('/mobile/admin') ||
@@ -69,7 +70,7 @@ export async function middleware(req: NextRequest) {
         const isCustomer = await authorizationCustomer();
         console.log(`Dashboard access - RestaurantManager: ${isRestaurantManager}, Customer: ${isCustomer}`);
         if (!isRestaurantManager && !isCustomer) {
-            console.log(`Redirecting to / from /dashboard`);
+            console.log(`Redirecting to / from /restaurantManager`);
             url.pathname = '/';
             return NextResponse.redirect(url);
         }

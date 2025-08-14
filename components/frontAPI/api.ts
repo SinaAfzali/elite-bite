@@ -38,6 +38,17 @@ export async function postFormData<R>(
     return response.json();
 }
 
+export async function deleteData<R>(endpoint: string): Promise<R> {
+    const response = await fetch(`${BASE_URL}${endpoint}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    });
+    return response.json();
+}
+
 interface ApiResponse<T = never> {
     status: string;
     message?: string;

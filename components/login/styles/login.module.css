@@ -8,10 +8,9 @@
     font-family: 'Vazirmatn', 'Poppins', sans-serif;
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow: auto;
     box-sizing: border-box;
 }
 
@@ -19,37 +18,27 @@
     box-sizing: border-box;
 }
 
-@keyframes brandGlow {
-    0%, 100% {
-        text-shadow: 0 0 8px rgba(0, 206, 203, 0.6), 0 0 8px rgba(249, 146, 69, 0.6);
-    }
-    50% {
-        text-shadow: 0 0 20px rgba(0, 206, 203, 0.9), 0 0 20px rgba(249, 146, 69, 0.9);
-    }
-}
-
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
 .title {
     font-family: 'Vazirmatn', 'Poppins', sans-serif;
     font-weight: 700;
-    font-size: 28px;
-    margin: 0 0 24px;
+    font-size: 24px;
+    margin: 0 0 20px;
     color: #1F2937;
-    animation: fadeIn 0.6s ease-out;
+    animation: fadeIn 0.5s ease-out;
 }
 
 .brand-title {
     font-family: 'Vazirmatn', 'Poppins', sans-serif;
     font-weight: 900;
-    font-size: 40px;
-    margin: 0 0 32px;
+    font-size: 32px;
+    margin: 0 0 20px;
     display: flex;
-    gap: 12px;
-    animation: brandGlow 2.5s ease-in-out infinite;
+    gap: 8px;
     text-align: center;
 }
 
@@ -66,29 +55,26 @@
     font-weight: 400;
     font-size: 16px;
     line-height: 24px;
-    letter-spacing: 0.5px;
-    margin: 16px 0 24px;
+    margin: 12px 0 20px;
     color: #374151;
-    animation: fadeIn 0.8s ease-out;
+    animation: fadeIn 0.6s ease-out;
 }
 
 .container {
     background: #FFFFFF;
-    border-radius: 32px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     position: relative;
-    overflow: hidden;
-    width: 480px;
-    max-width: 90%;
-    min-height: 520px;
+    width: 400px;
+    max-width: 95%;
+    min-height: 480px;
     border: 1px solid #E5E7EB;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 32px;
-    animation: fadeIn 0.6s ease-out;
-    background: linear-gradient(145deg, #ffffff 0%, #f9fafb 100%);
+    padding: 24px;
+    animation: fadeIn 0.5s ease-out;
 }
 
 .form-container {
@@ -97,16 +83,13 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 10;
 }
 
 .form-container form {
-    background: transparent;
     display: flex;
     flex-direction: column;
-    padding: 0 24px;
+    padding: 0 20px;
     width: 100%;
-    justify-content: center;
     align-items: center;
     text-align: center;
 }
@@ -115,75 +98,74 @@
     font-family: 'Vazirmatn', 'Poppins', sans-serif;
     background: #F9FAFB;
     border: 1px solid #D1D5DB;
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin: 12px 0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 10px 0;
     width: 100%;
-    font-size: 15px;
+    font-size: 14px;
     color: #1F2937;
     outline: none;
-    transition: all 0.3s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .form-container input::placeholder {
     color: #9CA3AF;
-    font-size: 15px;
-    font-weight: 400;
+    font-size: 14px;
 }
 
 .form-container input:hover {
     border-color: #00CECB;
-    box-shadow: 0 0 0 3px rgba(0, 206, 203, 0.1);
 }
 
 .form-container input:focus {
     border-color: #00CECB;
-    box-shadow: 0 0 0 3px rgba(0, 206, 203, 0.2);
-    transform: scale(1.01);
+    box-shadow: 0 0 0 2px rgba(0, 206, 203, 0.15);
 }
 
 .error {
     color: #EF4444;
     font-family: 'Vazirmatn', 'Poppins', sans-serif;
-    font-size: 14px;
-    margin: 12px 0;
-    display: block;
+    font-size: 13px;
+    margin: 10px 0;
     text-align: center;
-    animation: fadeIn 0.4s ease-out;
+    animation: fadeIn 0.3s ease-out;
 }
 
 .success {
     color: #10B981;
     font-family: 'Vazirmatn', 'Poppins', sans-serif;
-    font-size: 14px;
-    margin: 12px 0;
-    display: block;
+    font-size: 13px;
+    margin: 10px 0;
     text-align: center;
-    animation: fadeIn 0.4s ease-out;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.success-message {
+    color: #10B981;
+    font-family: 'Vazirmatn', 'Poppins', sans-serif;
+    font-size: 14px;
+    margin: 10px 0;
+    text-align: center;
 }
 
 .primary-button {
     font-family: 'Vazirmatn', 'Poppins', sans-serif;
-    border-radius: 12px;
+    border-radius: 8px;
     font-size: 14px;
-    font-weight: 600;
-    padding: 14px 48px;
-    letter-spacing: 0.5px;
+    font-weight: 500;
+    padding: 12px 32px;
     text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.3s ease;
-    margin: 12px 0;
+    transition: background 0.2s ease, transform 0.2s ease;
+    margin: 10px 0;
     color: #FFFFFF;
     background: linear-gradient(90deg, #00CECB 0%, #00A3A1 100%);
     border: none;
-    pointer-events: auto;
-    z-index: 10;
 }
 
 .primary-button:hover {
-    background: linear-gradient(90deg, #007F7A 0%, #006666 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 206, 203, 0.4);
+    background: linear-gradient(90deg, #00A3A1 0%, #007F7A 100%);
+    transform: translateY(-1px);
 }
 
 .primary-button:disabled {
@@ -191,66 +173,48 @@
     color: #9CA3AF;
     cursor: not-allowed;
     transform: none;
-    box-shadow: none;
-}
-
-.primary-button:active {
-    transform: translateY(0);
-}
-
-.primary-button:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 206, 203, 0.3);
 }
 
 .ghost-button {
     font-family: 'Vazirmatn', 'Poppins', sans-serif;
     background: transparent;
     color: #1F2937;
-    border-radius: 12px;
+    border-radius: 8px;
     font-size: 14px;
-    font-weight: 600;
-    padding: 14px 48px;
-    letter-spacing: 0.5px;
+    font-weight: 500;
+    padding: 12px 32px;
     text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
     border: 1px solid #D1D5DB;
-    pointer-events: auto;
-    z-index: 10;
 }
 
 .ghost-button:hover {
     background: #f99245;
     color: #FFFFFF;
     border-color: #f99245;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(249, 146, 69, 0.4);
 }
 
 .user-type-button {
     font-family: 'Vazirmatn', 'Poppins', sans-serif;
     flex: 1;
-    padding: 14px;
+    padding: 12px;
     background: linear-gradient(90deg, #00CECB 0%, #00A3A1 100%);
     color: #FFFFFF;
-    border-radius: 12px;
+    border-radius: 8px;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background 0.2s ease, transform 0.2s ease;
     border: none;
-    pointer-events: auto;
-    z-index: 20;
     text-align: center;
     text-transform: uppercase;
-    margin: 8px 6px;
+    margin: 6px;
 }
 
 .user-type-button:hover {
-    background: linear-gradient(90deg, #007F7A 0%, #006666 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 206, 203, 0.4);
+    background: linear-gradient(90deg, #00A3A1 0%, #007F7A 100%);
+    transform: translateY(-1px);
 }
 
 .user-type-button:disabled {
@@ -258,142 +222,98 @@
     color: #9CA3AF;
     cursor: not-allowed;
     transform: none;
-    box-shadow: none;
 }
 
 .user-type-button.active {
     background: linear-gradient(90deg, #007F7A 0%, #006666 100%);
-    box-shadow: 0 0 0 3px rgba(0, 206, 203, 0.3);
+    box-shadow: 0 0 0 2px rgba(0, 206, 203, 0.2);
 }
 
 .return-button {
     font-family: 'Vazirmatn', 'Poppins', sans-serif;
     background: linear-gradient(90deg, #f99245 0%, #e67e22 100%);
     color: #FFFFFF;
-    margin: 12px 0;
-    padding: 14px;
+    margin: 10px 0;
+    padding: 12px;
     width: 100%;
-    border-radius: 12px;
+    border-radius: 8px;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
     text-transform: uppercase;
-    transition: all 0.3s ease;
+    transition: background 0.2s ease, transform 0.2s ease;
     border: none;
-    pointer-events: auto;
-    z-index: 10;
 }
 
 .return-button:hover {
     background: linear-gradient(90deg, #e67e22 0%, #d66300 100%);
-    color: #FFFFFF;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(249, 146, 69, 0.4);
+    transform: translateY(-1px);
 }
 
 .toggle-container {
-    margin-top: 24px;
+    margin-top: 20px;
     text-align: center;
-    z-index: 10;
 }
 
 .user-type-selection {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 24px 0;
-    gap: 12px;
+    margin: 20px 0;
+    gap: 10px;
     width: 100%;
-    flex-wrap: nowrap;
-    z-index: 20;
+}
+
+.overlay-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease-in-out;
+    z-index: 5;
+}
+
+.overlay {
+    background: linear-gradient(135deg, #00CECB 0%, #f99245 100%);
+    position: relative;
+    width: 200%;
+    height: 100%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.overlay-panel {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 100%;
+    padding: 0 40px;
+    text-align: center;
+    transition: transform 0.6s ease-in-out;
+}
+
+.overlay-left {
+    transform: translateX(-20%);
+}
+
+.overlay-right {
+    right: 0;
+    transform: translateX(0);
 }
 
 @media (max-width: 768px) {
     .container {
         width: 90%;
-        min-height: 560px;
-        border-radius: 24px;
-        padding: 24px;
+        min-height: 500px;
+        border-radius: 12px;
+        padding: 20px;
     }
     .form-container form {
         padding: 0 16px;
-    }
-    .brand-title {
-        font-size: 36px;
-    }
-    .title {
-        font-size: 26px;
-    }
-    .description {
-        font-size: 15px;
-    }
-    .form-container input {
-        font-size: 14px;
-        height: 48px;
-    }
-    .form-container input::placeholder {
-        font-size: 14px;
-    }
-    .primary-button,
-    .ghost-button,
-    .user-type-button,
-    .return-button {
-        font-size: 13px;
-        padding: 12px;
-    }
-}
-
-@media (max-width: 480px) {
-    .container {
-        min-height: auto;
-        border-radius: 16px;
-    }
-    .form-container {
-        padding: 16px;
-    }
-    .form-container form {
-        padding: 0 12px;
-    }
-    .brand-title {
-        font-size: 32px;
-    }
-    .title {
-        font-size: 24px;
-        margin-bottom: 16px;
-    }
-    .description {
-        font-size: 14px;
-    }
-    .form-container input {
-        font-size: 13px;
-        height: 44px;
-    }
-    .form-container input::placeholder {
-        font-size: 13px;
-    }
-    .primary-button,
-    .ghost-button,
-    .user-type-button,
-    .return-button {
-        font-size: 12px;
-        padding: 10px;
-    }
-    .user-type-selection {
-        flex-direction: column;
-        gap: 12px;
-        align-items: stretch;
-    }
-}
-
-@media (max-width: 360px) {
-    .container {
-        margin: 8px;
-        padding: 16px;
-    }
-    .form-container {
-        padding: 12px;
-    }
-    .form-container form {
-        padding: 0 8px;
     }
     .brand-title {
         font-size: 28px;
@@ -402,11 +322,48 @@
         font-size: 22px;
     }
     .description {
+        font-size: 15px;
+    }
+    .form-container input {
         font-size: 13px;
+        padding: 10px 14px;
+    }
+    .form-container input::placeholder {
+        font-size: 13px;
+    }
+    .primary-button,
+    .ghost-button,
+    .user-type-button,
+    .return-button {
+        font-size: 13px;
+        padding: 10px 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        min-height: auto;
+        border-radius: 10px;
+    }
+    .form-container {
+        padding: 16px;
+    }
+    .form-container form {
+        padding: 0 12px;
+    }
+    .brand-title {
+        font-size: 26px;
+    }
+    .title {
+        font-size: 20px;
+        margin-bottom: 16px;
+    }
+    .description {
+        font-size: 14px;
     }
     .form-container input {
         font-size: 12px;
-        height: 40px;
+        padding: 8px 12px;
     }
     .form-container input::placeholder {
         font-size: 12px;
@@ -415,7 +372,47 @@
     .ghost-button,
     .user-type-button,
     .return-button {
+        font-size: 12px;
+        padding: 8px 20px;
+    }
+    .user-type-selection {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 360px) {
+    .container {
+        margin: 8px;
+        padding: 12px;
+    }
+    .form-container {
+        padding: 10px;
+    }
+    .form-container form {
+        padding: 0 8px;
+    }
+    .brand-title {
+        font-size: 24px;
+    }
+    .title {
+        font-size: 18px;
+    }
+    .description {
+        font-size: 13px;
+    }
+    .form-container input {
         font-size: 11px;
-        padding: 8px;
+        padding: 8px 10px;
+    }
+    .form-container input::placeholder {
+        font-size: 11px;
+    }
+    .primary-button,
+    .ghost-button,
+    .user-type-button,
+    .return-button {
+        font-size: 11px;
+        padding: 8px 16px;
     }
 }

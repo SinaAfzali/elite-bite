@@ -1,0 +1,326 @@
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap');
+
+.wrapper {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: 'Vazirmatn', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    box-sizing: border-box;
+}
+
+.wrapper * {
+    box-sizing: border-box;
+}
+
+.manager-dashboard {
+    width: 100%;
+    max-width: 1200px;
+    min-height: 100vh;
+    padding: 32px;
+    background: #FFFFFF;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    direction: rtl;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard-title {
+    font-family: 'Vazirmatn', sans-serif;
+    font-weight: 900;
+    font-size: 32px;
+    color: #1F2937;
+    text-align: center;
+    margin-bottom: 32px;
+    background: linear-gradient(90deg, #00CECB 0%, #f99245 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: fadeIn 0.6s ease-out;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    flex-grow: 1;
+}
+
+.info-card {
+    background: #F8FAFC;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    margin-bottom: 24px;
+    animation: fadeIn 0.7s ease-out;
+}
+
+.info-item {
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 16px;
+    color: #374151;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+
+.info-item strong {
+    color: #1F2937;
+    margin-left: 8px;
+}
+
+.add-btn, .return-btn, .action-btn {
+    font-family: 'Vazirmatn', sans-serif;
+    width: 100%;
+    max-width: 300px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.2s ease, transform 0.2s ease;
+    margin: 12px 0;
+}
+
+.add-btn {
+    background: linear-gradient(90deg, #00CECB 0%, #00A3A1 100%);
+    color: #FFFFFF;
+}
+
+.add-btn:hover {
+    background: linear-gradient(90deg, #00A3A1 0%, #007F7A 100%);
+    transform: translateY(-1px);
+}
+
+.return-btn {
+    background: linear-gradient(90deg, #f99245 0%, #e67e22 100%);
+    color: #FFFFFF;
+}
+
+.return-btn:hover {
+    background: linear-gradient(90deg, #e67e22 0%, #d66300 100%);
+    transform: translateY(-1px);
+}
+
+.action-btn {
+    background: linear-gradient(90deg, #10B981 0%, #059669 100%);
+    color: #FFFFFF;
+    max-width: 200px;
+}
+
+.action-btn:hover {
+    background: linear-gradient(90deg, #059669 0%, #047857 100%);
+    transform: translateY(-1px);
+}
+
+.restaurant-card {
+    background: #FFFFFF;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    margin-bottom: 24px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.restaurant-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1F2937;
+    margin-bottom: 12px;
+}
+
+.restaurant-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+}
+
+.no-restaurant-text {
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 16px;
+    color: #6b7280;
+    text-align: center;
+    margin-bottom: 24px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.loading-spinner {
+    font-family: 'Vazirmatn', sans-serif;
+    text-align: center;
+    font-size: 18px;
+    color: #374151;
+    padding: 20px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+.error-message {
+    font-family: 'Vazirmatn', sans-serif;
+    text-align: center;
+    font-size: 16px;
+    color: #EF4444;
+    margin-bottom: 16px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.footer-title {
+    font-family: 'Vazirmatn', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: #1F2937;
+    text-align: center;
+    margin-top: 32px;
+    margin-bottom: 16px;
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+    .manager-dashboard {
+        max-width: 95%;
+        padding: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .manager-dashboard {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .dashboard-title {
+        font-size: 28px;
+    }
+    .footer-title {
+        font-size: 22px;
+    }
+    .info-card {
+        padding: 20px;
+    }
+    .restaurant-card {
+        padding: 20px;
+    }
+    .add-btn, .return-btn, .action-btn {
+        max-width: 250px;
+        padding: 10px 20px;
+        font-size: 13px;
+    }
+    .no-restaurant-text {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .manager-dashboard {
+        padding: 16px;
+        border-radius: 12px;
+    }
+    .dashboard-title {
+        font-size: 24px;
+    }
+    .footer-title {
+        font-size: 20px;
+    }
+    .info-card {
+        padding: 16px;
+    }
+    .info-item {
+        font-size: 14px;
+    }
+    .restaurant-card {
+        padding: 16px;
+    }
+    .card-title {
+        font-size: 18px;
+    }
+    .add-btn, .return-btn, .action-btn {
+        max-width: 200px;
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+    .no-restaurant-text {
+        font-size: 13px;
+    }
+    .loading-spinner {
+        font-size: 16px;
+    }
+    .error-message {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 360px) {
+    .manager-dashboard {
+        padding: 12px;
+        border-radius: 10px;
+    }
+    .dashboard-title {
+        font-size: 22px;
+    }
+    .footer-title {
+        font-size: 18px;
+    }
+    .info-card {
+        padding: 12px;
+    }
+    .info-item {
+        font-size: 13px;
+    }
+    .restaurant-card {
+        padding: 12px;
+    }
+    .card-title {
+        font-size: 16px;
+    }
+    .add-btn, .return-btn, .action-btn {
+        max-width: 180px;
+        padding: 8px 14px;
+        font-size: 11px;
+    }
+    .no-restaurant-text {
+        font-size: 12px;
+    }
+    .loading-spinner {
+        font-size: 14px;
+    }
+    .error-message {
+        font-size: 13px;
+    }
+}

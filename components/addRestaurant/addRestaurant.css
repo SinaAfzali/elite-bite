@@ -1,0 +1,297 @@
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap');
+
+.wrapper {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: 'Vazirmatn', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    box-sizing: border-box;
+}
+
+.wrapper * {
+    box-sizing: border-box;
+}
+
+.manager-dashboard {
+    width: 100%;
+    max-width: 800px;
+    padding: 32px;
+    background: #FFFFFF;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    direction: rtl;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard-title {
+    font-family: 'Vazirmatn', sans-serif;
+    font-weight: 900;
+    font-size: 32px;
+    color: #1F2937;
+    text-align: center;
+    margin-bottom: 32px;
+    background: linear-gradient(90deg, #00CECB 0%, #f99245 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: fadeIn 0.6s ease-out;
+}
+
+.content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.info-card {
+    background: #F8FAFC;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    margin-bottom: 24px;
+    animation: fadeIn 0.7s ease-out;
+}
+
+.info-card label {
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #1F2937;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.input {
+    font-family: 'Vazirmatn', sans-serif;
+    background: #F9FAFB;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 10px 0;
+    width: 100%;
+    font-size: 14px;
+    color: #1F2937;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input:hover {
+    border-color: #00CECB;
+}
+
+.input:focus {
+    border-color: #00CECB;
+    box-shadow: 0 0 0 2px rgba(0, 206, 203, 0.15);
+}
+
+.input::placeholder {
+    color: #9CA3AF;
+    font-size: 14px;
+}
+
+textarea.input {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.areas-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 10px 0;
+}
+
+.area-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.area-item label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.area-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #E5E7EB;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.area-item input[type="checkbox"]:checked {
+    background: #00CECB;
+    border-color: #00CECB;
+}
+
+.area-item input[type="checkbox"]:checked::after {
+    content: '✔';
+    display: block;
+    color: #FFFFFF;
+    font-size: 12px;
+    text-align: center;
+    line-height: 20px;
+}
+
+.error {
+    color: #EF4444;
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 13px;
+    margin: 10px 0;
+    text-align: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.success {
+    color: #10B981;
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 13px;
+    margin: 10px 0;
+    text-align: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.primary-button {
+    font-family: 'Vazirmatn', sans-serif;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 32px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+    margin: 10px 0;
+    color: #FFFFFF;
+    background: linear-gradient(90deg, #00CECB 0%, #00A3A1 100%);
+    border: none;
+}
+
+.primary-button:hover {
+    background: linear-gradient(90deg, #00A3A1 0%, #007F7A 100%);
+    transform: translateY(-1px);
+}
+
+.return-btn {
+    font-family: 'Vazirmatn', sans-serif;
+    background: linear-gradient(90deg, #f99245 0%, #e67e22 100%);
+    color: #FFFFFF;
+    margin: 10px 0;
+    padding: 12px;
+    width: 100%;
+    max-width: 300px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    transition: background 0.2s ease, transform 0.2s ease;
+    border: none;
+}
+
+.return-btn:hover {
+    background: linear-gradient(90deg, #e67e22 0%, #d66300 100%);
+    transform: translateY(-1px);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .manager-dashboard {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .dashboard-title {
+        font-size: 28px;
+    }
+    .info-card {
+        padding: 20px;
+    }
+    .input {
+        font-size: 13px;
+        padding: 10px 14px;
+    }
+    .primary-button,
+    .return-btn {
+        max-width: 250px;
+        padding: 10px 20px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .manager-dashboard {
+        padding: 16px;
+        border-radius: 12px;
+    }
+    .dashboard-title {
+        font-size: 24px;
+    }
+    .info-card {
+        padding: 16px;
+    }
+    .info-card label {
+        font-size: 14px;
+    }
+    .input {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+    .primary-button,
+    .return-btn {
+        max-width: 200px;
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+    .error,
+    .success {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 360px) {
+    .manager-dashboard {
+        padding: 12px;
+        border-radius: 10px;
+    }
+    .dashboard-title {
+        font-size: 22px;
+    }
+    .info-card {
+        padding: 12px;
+    }
+    .info-card label {
+        font-size: 13px;
+    }
+    .input {
+        font-size: 11px;
+        padding: 8px 10px;
+    }
+    .primary-button,
+    .return-btn {
+        max-width: 180px;
+        padding: 8px 14px;
+        font-size: 11px;
+    }
+    .error,
+    .success {
+        font-size: 11px;
+    }
+}
