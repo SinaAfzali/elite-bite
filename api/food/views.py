@@ -252,3 +252,46 @@ class FilterFoodsByPrice(APIView):
             "message": "غذاها بر اساس بازه قیمت جستجو شدند.",
             "data": data
         }, status=status.HTTP_200_OK)
+
+
+class GetFoodDetails(APIView):
+    def post(self, request):
+        food_id = request.data.get("foodId")
+        if not food_id:
+            return Response({
+                "status": "error",
+                "message": "پارامتر foodId الزامی است."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            food = Food.objects.select_related('category', 'restaurant').get(id=food_id)
+        except Food.DoesNotExist:
+            return Response({
+                "status": "error",
+                "message": "غذا یافت نشد."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        data = {
+            "id": food.id,
+            "name": food.name,
+            "price": food.price,
+            "description": food.description,
+            "image": food.image,
+            "category": {
+                "id": food.category.id,
+                "name": food.category.name
+            } if food.category else None,
+            "isAvailable": food.isAvailable,
+            "ratingScore": float(food.ratingScore),
+            "ratingTotalVoters": food.ratingTotalVoters,
+            "restaurant": {
+                "id": food.restaurant.id if food.restaurant else None,
+                "name": food.restaurant.name if food.restaurant else None
+            }
+        }
+
+        return Response({
+            "status": "success",
+            "message": "اطلاعات غذا ارسال شد.",
+            "data": data
+        }, status=status.HTTP_200_OK)

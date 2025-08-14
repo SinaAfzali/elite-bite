@@ -1,0 +1,43 @@
+{
+  "api": "/api/food/details",
+  "method": "post",
+  "inputType": "application/json",
+  "input": {
+    "foodId": "integer (شناسه عددی غذا، الزامی)"
+  },
+  "output": [
+    {
+      "status": "success",
+      "message": "اطلاعات غذا ارسال شد.",
+      "data": {
+        "id": 10,
+        "name": "پیتزا مخصوص",
+        "price": 250000,
+        "description": "پیتزای ویژه با مخلفات کامل",
+        "image": "url/to/pizza.jpg",
+        "category": {
+          "id": 3,
+          "name": "پیتزا"
+        },
+        "isAvailable": true,
+        "ratingScore": 4.8,
+        "ratingTotalVoters": 55,
+        "restaurant": {
+          "id": 1,
+          "name": "رستوران نمونه"
+        }
+      },
+      "statusCode": 200
+    },
+    {
+      "status": "error",
+      "message": "غذا یافت نشد.",
+      "statusCode": 404
+    },
+    {
+      "status": "error",
+      "message": "پارامتر foodId الزامی است.",
+      "statusCode": 400
+    }
+  ]
+}
