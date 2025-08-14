@@ -276,7 +276,10 @@ class GetRestaurantInfo(APIView):
     def get(self, request):
         manager = getRestaurantManager(request)
         if manager:
-            restaurant = Restaurant.objects.get(owner=manager.id)
+            restaurant = manager.restaurant
+            foods = Food.objects.filter(restaurant=restaurant)
+            if not restaurant:
+                return Response({'message': 'شما رستورانی ندارید!', 'status': 'error'})
             areas = restaurant.areas.all()
             return Response({'message': 'اطلاعات رستوران ارسال شد.', 'status': 'success',
                              'data': {
@@ -294,6 +297,20 @@ class GetRestaurantInfo(APIView):
                                  'phoneNumber': restaurant.phoneNumber,
                                  'contactEmail': restaurant.contactEmail,
                                  'isVerified': restaurant.isVerified,
+                                 'foods': [
+                                     {
+                                         "id": f.id,
+                                         "name": f.name,
+                                         "price": f.price,
+                                         "description": f.description,
+                                         "image": f.image,
+                                         "category": f.category.name if f.category else None,
+                                         "isAvailable": f.isAvailable,
+                                         "ratingScore": float(f.ratingScore),
+                                         "ratingTotalVoters": f.ratingTotalVoters,
+                                     }
+                                     for f in foods
+                                 ]
                              }}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'لاگین نیست.', 'status': 'unauthorized'},
