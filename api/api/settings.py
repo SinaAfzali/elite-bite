@@ -47,18 +47,12 @@ INSTALLED_APPS = [
     'customer',
     'restaurantManager',
     'restaurant',
-    'menu',
-    'reviews',
-    'subscriptions',
-    'support',
-    'analytics',
     'notifications',
     'userVerification',
     'food',
     'FoodCategory',
     'City',
     'Area',
-    'payment',
     'Cart',
     'Order'
 ]

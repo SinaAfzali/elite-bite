@@ -1,0 +1,41 @@
+{
+  "api": "/api/order/add",
+  "method": "get",
+  "auth": "customer",
+  "inputType": "none",
+  "input": {},
+  "output": [
+    {
+      "status": "success",
+      "message": "سفارش ایجاد شد و در انتظار پرداخت است.",
+      "data": {
+        "orderId": "integer",
+        "paymentCode": "integer (کد ۵ رقمی)",
+        "status": "waitingForPayment",
+        "price": "integer (مبلغ بدون مالیات)",
+        "totalPrice": "integer (مبلغ با مالیات ۱۰٪)",
+        "tax": "integer (مبلغ مالیات)",
+        "items": [
+          {
+            "foodName": "string",
+            "foodPrice": "integer",
+            "foodDescription": "string",
+            "foodCategory": "integer",
+            "quantity": "integer"
+          }
+        ]
+      },
+      "statusCode": 201
+    },
+    {
+      "status": "error",
+      "message": "سبد خرید شما خالی است.",
+      "statusCode": 400
+    },
+    {
+      "status": "unauthorized",
+      "message": "دسترسی غیرمجاز",
+      "statusCode": 401
+    }
+  ]
+}

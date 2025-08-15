@@ -1,0 +1,35 @@
+{
+  "api": "/api/order/payment",
+  "method": "post",
+  "auth": "customer",
+  "inputType": "application/json",
+  "input": {
+    "paymentCode": "integer (کد ۵ رقمی ارسال‌شده به ایمیل، الزامی)"
+  },
+  "output": [
+    {
+      "status": "success",
+      "message": "پرداخت تأیید شد و سفارش در حال پردازش است.",
+      "data": {
+        "orderId": "integer",
+        "status": "processing"
+      },
+      "statusCode": 200
+    },
+    {
+      "status": "error",
+      "message": "paymentCode الزامی است.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "کد پرداخت نامعتبر است.",
+      "statusCode": 400
+    },
+    {
+      "status": "unauthorized",
+      "message": "دسترسی غیرمجاز",
+      "statusCode": 401
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "api": "/api/order/changeStatus",
+  "method": "post",
+  "auth": "restaurantManager",
+  "inputType": "application/json",
+  "input": {
+    "orderId": "integer (شناسه سفارش، الزامی)",
+    "status": "string (یکی از: waitingForPayment, processing, preparing, delivering, completed, canceled)"
+  },
+  "output": [
+    {
+      "status": "success",
+      "message": "وضعیت سفارش به {status} تغییر کرد.",
+      "data": {
+        "orderId": "integer",
+        "status": "string"
+      },
+      "statusCode": 200
+    },
+    {
+      "status": "error",
+      "message": "orderId و status الزامی هستند.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "وضعیت جدید نامعتبر است.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "سفارش یافت نشد.",
+      "statusCode": 404
+    },
+    {
+      "status": "error",
+      "message": "این سفارش مربوط به رستوران شما نیست.",
+      "statusCode": 403
+    },
+    {
+      "status": "unauthorized",
+      "message": "دسترسی غیرمجاز",
+      "statusCode": 401
+    }
+  ]
+}
