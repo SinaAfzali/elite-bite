@@ -79,7 +79,7 @@ const Header: React.FC = () => {
 
   const handleDashboardClick = () => {
     if (isLoggedIn) {
-      const dashboardPath = userType === 'customer' ? '/customerDashboard' : '/restaurantManager';
+      const dashboardPath = userType === 'customer' ? '/customer' : '/restaurantManager';
       router.push(dashboardPath);
     } else {
       router.push('/login');
