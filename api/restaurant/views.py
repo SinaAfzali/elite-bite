@@ -169,6 +169,7 @@ class GetNearestRestaurant(APIView):
             data.append({
                 "id": r.id,
                 "name": r.name,
+                "image": r.image,
                 "description": r.description,
                 "isActive": r.isActive,
                 "startWorkHour": r.startWorkHour,
