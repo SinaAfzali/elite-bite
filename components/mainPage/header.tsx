@@ -1,11 +1,10 @@
-// Header.tsx
 "use client"
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import API, { getData } from '@/components/frontAPI/api';
+import API from '@/components/frontAPI/api';
 import './header.css';
-import { useAuthStore } from '@/components/login/authStore'; // Adjust path
+import { useAuthStore } from '@/components/login/authStore';
 
 interface City {
   id: number;
@@ -28,12 +27,11 @@ const Header: React.FC = () => {
   const [selectedAreaId, setSelectedAreaId] = useState<number | "">("");
   const [locationButtonText, setLocationButtonText] = useState("مکان");
   const [showAuthDropdown, setShowAuthDropdown] = useState(false);
-  const { isLoggedIn, userType, logout } = useAuthStore(); // Use store
+  const [searchValue, setSearchValue] = useState("...سفارش آنلاین غذا");
+  const { isLoggedIn, userType, logout } = useAuthStore();
 
   useEffect(() => {
     fetchCities();
-    // Removed checkLoginStatus() since API doesn't exist yet (would override to false)
-    // When API is implemented, add it back here to sync on mount
   }, []);
 
   const fetchCities = async () => {
@@ -69,17 +67,18 @@ const Header: React.FC = () => {
     setSelectedArea(area);
     setLocationButtonText(`${city}, ${area}`);
     setIsLocationModalOpen(false);
+    localStorage.setItem('selectedAreaId', selectedAreaId.toString());
+    window.dispatchEvent(new Event('locationChanged'));
   };
 
   const handleLogout = async () => {
-    await logout(); // Use store's logout (client-side + attempt API)
+    await logout();
     setShowAuthDropdown(false);
     router.push('/');
   };
 
   const handleDashboardClick = () => {
     if (isLoggedIn) {
-      // Route based on userType
       const dashboardPath = userType === 'customer' ? '/customerDashboard' : '/restaurantManager';
       router.push(dashboardPath);
     } else {
@@ -140,7 +139,9 @@ const Header: React.FC = () => {
               <input
                   type="text"
                   placeholder="...رستوران‌ها، کافه‌ها، غذاها"
-                  defaultValue="...سفارش آنلاین غذا"
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  onFocus={() => setSearchValue("")}
               />
               <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -150,9 +151,9 @@ const Header: React.FC = () => {
                 <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
               </svg>
             </div>
-            <div className="logo">
+            <Link href="http://localhost:3000/" className="logo">
               <span>elite</span>bite
-            </div>
+            </Link>
           </div>
         </header>
         {isLocationModalOpen && (
