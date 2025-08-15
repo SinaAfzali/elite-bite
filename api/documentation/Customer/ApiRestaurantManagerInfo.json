@@ -1,0 +1,23 @@
+{
+  "api": "/api/customer/info",
+  "method": "get",
+  "inputType": "none",
+  "input": {},
+  "output": [
+    {
+      "status": "success",
+      "message": "اطلاعات مشتری ارسال شد.",
+      "data": {
+        "firstName": "string (نام مشتری)",
+        "lastName": "string (نام خانوادگی مشتری)",
+        "email": "string (ایمیل مشتری)"
+      },
+      "statusCode": 200
+    },
+    {
+      "status": "unauthorized",
+      "message": "لاگین نیست.",
+      "statusCode": 401
+    }
+  ]
+}

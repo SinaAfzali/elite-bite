@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from .models import Customer
 from userVerification.models import VerificationCode
+from .services import getCustomer
 from .utilities import SendSignupCode, SendLoginCode
 
 
@@ -160,3 +161,31 @@ class LoginVerifyView(APIView):
         }
         return Response({'message': 'ورود موفقیت‌آمیز.', 'status': 'success'},
                         status=status.HTTP_200_OK)
+
+
+
+
+class CheckLoginView(APIView):
+    def get(self, request):
+        if getCustomer(request):
+            return Response({'message': 'لاگین است.', 'status': 'success'},
+                        status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'لاگین نیست.', 'status': 'unauthorized'},
+                            status=status.HTTP_401_UNAUTHORIZED)
+
+
+
+class GetInformation(APIView):
+    def get(self, request):
+        customer = getCustomer(request)
+        if customer:
+            return Response({'message': 'اطلاعات مشتری ارسال شد.', 'status': 'success',
+                             'data' : {
+                                 'firstName': customer.firstName,
+                                 'lastName': customer.lastName,
+                                 'email': customer.email,
+                             }}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'لاگین نیست.', 'status': 'unauthorized'},
+                            status=status.HTTP_401_UNAUTHORIZED)
