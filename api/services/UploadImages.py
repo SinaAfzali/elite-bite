@@ -8,7 +8,7 @@ def uploadImage(image_file):
     ext = os.path.splitext(image_file.name)[1]
     random_name = secrets.token_hex(32) + ext
 
-    image_path = os.path.join(settings.BASE_DIR, "public\images", random_name)
+    image_path = os.path.join(settings.BASE_DIR, "..\public\images", random_name)
     os.makedirs(os.path.dirname(image_path), exist_ok=True)
 
     with open(image_path, "wb+") as destination:

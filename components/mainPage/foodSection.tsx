@@ -487,7 +487,7 @@ const FoodSection: React.FC = () => {
                         >
                             <div className="restaurant-image">
                                 <img
-                                    src={item.image || fallbackImage}
+                                    src={item.image}
                                     alt={item.name}
                                     onError={(e) => {
                                         e.currentTarget.src = fallbackImage;
@@ -519,12 +519,12 @@ const FoodSection: React.FC = () => {
                         >
                             <div className="restaurant-image">
                                 <img
-                                    src={item.image || fallbackImage}
+                                    src={item.image}
                                     alt={item.name}
-                                    onError={(e) => {
-                                        e.currentTarget.src = fallbackImage;
-                                        e.currentTarget.onerror = null;
-                                    }}
+                                    // onError={(e) => {
+                                    //     e.currentTarget.src = fallbackImage;
+                                    //     e.currentTarget.onerror = null;
+                                    // }}
                                 />
                                 <div className="rating">
                                     <svg

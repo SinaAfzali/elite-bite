@@ -49,7 +49,7 @@ class AddFoodView(APIView):
                 "status": "error",
                 "message": "شما هنوز رستوران ثبت نکرده‌اید."
             }, status=status.HTTP_400_BAD_REQUEST)
-        elif not restaurant.isVerified:
+        elif not restaurant[0].isVerified:
             return Response({
                 "status": "error",
                 "message": "رستوران شما به تایید ادمین نرسیده است. بنابراین نمیتوانید غذا ثبت کنید."
@@ -61,10 +61,10 @@ class AddFoodView(APIView):
             name=data["name"].strip(),
             price=int(data["price"]),
             description=data.get("description", "").strip(),
-            image='/public/images/' + randomName,
+            image='/images/' + randomName,
             category=category,
             isAvailable=bool(data.get("isAvailable", False)),
-            restaurant=restaurant
+            restaurant=restaurant[0]
         )
 
         return Response({
@@ -187,22 +187,19 @@ class DeleteFood(APIView):
 class GetFoodsByAreaView(APIView):
     def post(self, request):
         areaId = request.data.get('areaId')
-        if not areaId:
-            return Response({
-                "status": "error",
-                "message": "منطقه خود را مشخص کنید"
-            }, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            area = Area.objects.get(id=int(areaId))
+            if not areaId:
+                foods = Food.objects.all()
+            else:
+                area = Area.objects.get(id=int(areaId))
+                restaurants = Restaurant.objects.filter(areas=area)
+                foods = Food.objects.filter(restaurant__in=restaurants, isAvailable=True)
         except Area.DoesNotExist:
             return Response({
                 "status": "error",
                 "message": "منطقه انتخابی توسط سامانه پوشش داده نمیشود."
             }, status=status.HTTP_404_NOT_FOUND)
-
-        restaurants = Restaurant.objects.filter(areas=area)
-        foods = Food.objects.filter(restaurant__in=restaurants, isAvailable=True)
 
         foodList = []
         for food in foods:

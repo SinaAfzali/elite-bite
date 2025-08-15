@@ -51,7 +51,7 @@ class AddRestaurantView(APIView):
             owner=getRestaurantManager(request),
             name=data['name'].strip(),
             description=data.get('description', '').strip(),
-            image='/public/images/' + randomName,
+            image='/images/' + randomName,
             address=data['address'].strip(),
             city=City.objects.get(id=int(data['city'])),
             phoneNumber=data['phoneNumber'].strip(),

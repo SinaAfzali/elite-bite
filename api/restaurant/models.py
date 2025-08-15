@@ -11,7 +11,7 @@ class Restaurant(models.Model):
     description = models.TextField(blank=True, null=True)
     image = models.CharField(max_length=255, blank=True, null=True)
     registrationDate = models.DateTimeField(auto_now_add=True)
-    isActive = models.BooleanField(default=False)
+    isActive = models.BooleanField(default=True)
     # اطلاعات تماس و مکان
     address = models.TextField()
     city = models.ForeignKey(City, on_delete=models.CASCADE)
