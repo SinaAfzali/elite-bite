@@ -73,6 +73,42 @@ interface AreaResponse {
     areas: Area[];
 }
 
+interface Restaurant {
+    id: number;
+    name: string;
+    description: string;
+    isActive: boolean;
+    startWorkHour: number;
+    endWorkHour: number;
+    ratingAvg: number;
+    ratingCount: number;
+    cityName: string;
+    cityId: number;
+    areas: { id: number; name: string }[];
+    deliveryFeeBase?: number;
+    minFoodPrice?: number;
+}
+
+interface FoodItem {
+    id: number;
+    name: string;
+    price: number;
+    description?: string;
+    image?: string;
+    categoryId: number;
+    categoryName: string;
+    restaurantId: number;
+    restaurantName: string;
+    isAvailable: boolean;
+    ratingScore: number;
+    ratingTotalVoters: number;
+}
+
+interface FoodCategory {
+    id: number;
+    name: string;
+}
+
 class API {
     static customerSignupCode(data: {
         firstName: string;
@@ -142,7 +178,6 @@ class API {
         return getData<ApiResponse<City[]>>('/api/city/all');
     }
 
-
     static getAreasByCityId(data: { cityId: number }) {
         return postJson<{ cityId: number }, AreaResponse>(
             '/api/area/selectById',
@@ -172,6 +207,52 @@ class API {
 
     static getOrders() {
         return getData<ApiResponse>('/api/orders');
+    }
+
+    static getNearestRestaurants(data: { areaId: number }) {
+        return postJson<{ areaId: number }, ApiResponse<Restaurant[]>>(
+            '/api/restaurant/nearest',
+            data
+        );
+    }
+
+    static getNearestFoods(data: { areaId: number }) {
+        return postJson<{ areaId: number }, ApiResponse<FoodItem[]>>(
+            '/api/food/nearest',
+            data
+        );
+    }
+
+    static getFoodCategories() {
+        return getData<ApiResponse<FoodCategory[]>>('/api/categories');
+    }
+
+    static filterFoodsByCategory(data: { areaId?: number; categoryId: number }) {
+        return postJson<{ areaId?: number; categoryId: number }, ApiResponse<FoodItem[]>>(
+            '/api/food/filter/category',
+            data
+        );
+    }
+
+    static filterRestaurantsByCategory(data: { areaId?: number; foodCategoryId: number }) {
+        return postJson<{ areaId?: number; foodCategoryId: number }, ApiResponse<Restaurant[]>>(
+            '/api/restaurant/filter/foodCategory',
+            data
+        );
+    }
+
+    static filterRestaurantsByPrice(data: { areaId?: number; minPrice?: number; maxPrice?: number; priceOrder?: 'asc' | 'desc' }) {
+        return postJson<{ areaId?: number; minPrice?: number; maxPrice?: number; priceOrder?: 'asc' | 'desc' }, ApiResponse<Restaurant[]>>(
+            '/api/restaurant/filter/price',
+            data
+        );
+    }
+
+    static filterRestaurantsByRating(data: { areaId?: number }) {
+        return postJson<{ areaId?: number }, ApiResponse<Restaurant[]>>(
+            '/api/restaurant/filter/rating',
+            data
+        );
     }
 
     static checkRestaurantManagerLogin = '/api/restaurantManager/check-login';
