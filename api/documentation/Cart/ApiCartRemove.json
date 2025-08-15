@@ -1,0 +1,51 @@
+{
+  "api": "/api/cart/remove",
+  "method": "post",
+  "inputType": "application/json",
+  "input": {
+    "foodId": "integer (آیدی عددی غذای موجود در سبد خرید، الزامی)"
+  },
+  "output": [
+    {
+      "status": "success",
+      "message": "نام_غذا از سبد خرید حذف شد.",
+      "data": {
+        "foods": [
+          {
+            "id": "integer",
+            "name": "string",
+            "price": "integer",
+            "description": "string",
+            "image": "string (url)",
+            "category": "integer",
+            "quantity": "integer"
+          }
+        ],
+        "tax": "integer",
+        "price": "integer",
+        "totalPrice": "integer"
+      },
+      "statusCode": 200
+    },
+    {
+      "status": "error",
+      "message": "مشتری وارد نشده است.",
+      "statusCode": 401
+    },
+    {
+      "status": "error",
+      "message": "پارامتر foodId الزامی است.",
+      "statusCode": 400
+    },
+    {
+      "status": "not_found",
+      "message": "غذا یافت نشد.",
+      "statusCode": 404
+    },
+    {
+      "status": "error",
+      "message": "این غذا در سبد خرید وجود ندارد.",
+      "statusCode": 400
+    }
+  ]
+}

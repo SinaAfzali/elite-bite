@@ -58,8 +58,9 @@ INSTALLED_APPS = [
     'FoodCategory',
     'City',
     'Area',
-    'order',
-    'payment'
+    'payment',
+    'Cart',
+    'Order'
 ]
 
 MIDDLEWARE = [

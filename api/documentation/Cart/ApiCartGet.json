@@ -1,0 +1,34 @@
+{
+  "api": "/api/cart/get",
+  "method": "get",
+  "inputType": "none",
+  "input": {},
+  "output": [
+    {
+      "status": "success",
+      "message": "لیست سبد خرید دریافت شد.",
+      "data": {
+        "foods": [
+          {
+            "id": "integer",
+            "name": "string",
+            "price": "integer",
+            "description": "string",
+            "image": "string (url)",
+            "category": "integer",
+            "quantity": "integer"
+          }
+        ],
+        "tax": "integer",
+        "price": "integer",
+        "totalPrice": "integer"
+      },
+      "statusCode": 200
+    },
+    {
+      "status": "error",
+      "message": "مشتری وارد نشده است.",
+      "statusCode": 401
+    }
+  ]
+}

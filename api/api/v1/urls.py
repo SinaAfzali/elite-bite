@@ -8,4 +8,6 @@ urlpatterns=[
     path("city/", include('City.urls')),
     path("area/", include('Area.urls')),
     path('foodCategory/', include('FoodCategory.urls')),
+    path('cart/', include('Cart.urls')),
+    path('order/', include('Order.urls')),
 ]
