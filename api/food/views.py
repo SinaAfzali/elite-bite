@@ -74,6 +74,116 @@ class AddFoodView(APIView):
         }, status=status.HTTP_201_CREATED)
 
 
+class EditFoodView(APIView):
+    @require_authorization_manager
+    def post(self, request):
+        data = request.data.copy()
+        food_id = data.get("foodId")
+        if not food_id:
+            return Response({
+                "status": "error",
+                "message": "پارامتر foodId الزامی است."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            food = Food.objects.select_related('restaurant').get(id=food_id)
+        except Food.DoesNotExist:
+            return Response({
+                "status": "error",
+                "message": "غذا یافت نشد."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        manager = getRestaurantManager(request)
+        if food.restaurant.owner != manager:
+            return Response({
+                "status": "error",
+                "message": "این غذا متعلق به رستوران شما نیست."
+            }, status=status.HTTP_403_FORBIDDEN)
+
+        # ویرایش فیلدها در صورت ارسال شدن
+        if "name" in data:
+            food.name = data["name"].strip()
+        if "price" in data:
+            try:
+                food.price = int(data["price"])
+            except ValueError:
+                return Response({
+                    "status": "error",
+                    "message": "مقدار قیمت معتبر نیست."
+                }, status=status.HTTP_400_BAD_REQUEST)
+        if "description" in data:
+            food.description = data["description"].strip()
+        if "category" in data:
+            try:
+                category = FoodCategory.objects.get(id=data["category"])
+                food.category = category
+            except FoodCategory.DoesNotExist:
+                return Response({
+                    "status": "error",
+                    "message": "دسته‌بندی مورد نظر یافت نشد."
+                }, status=status.HTTP_400_BAD_REQUEST)
+        if "isAvailable" in data:
+            food.isAvailable = bool(data.get("isAvailable"))
+
+        # آپلود تصویر جدید در صورت ارسال
+        image_file = request.FILES.get("image")
+        if image_file:
+            valid_image = ImageValidation(image_file)
+            if not valid_image['valid']:
+                return Response({
+                    "status": "error",
+                    "message": valid_image['message'],
+                }, status=status.HTTP_400_BAD_REQUEST)
+            randomName = uploadImage(image_file)
+            food.image = '/public/images/' + randomName
+
+        food.save()
+
+        return Response({
+            "status": "success",
+            "message": "غذا با موفقیت ویرایش شد.",
+            "foodId": food.id
+        }, status=status.HTTP_200_OK)
+
+
+class DeleteFood(APIView):
+    @require_authorization_manager
+    def post(self, request):
+        food_id = request.data.get("foodId")
+        if not food_id:
+            return Response(
+                {'status': 'error', 'message': 'پارامتر foodId الزامی است.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        manager = getRestaurantManager(request)
+        if not manager:
+            return Response(
+                {'status': 'error', 'message': 'احراز هویت انجام نشده است.'},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        try:
+            food = Food.objects.select_related('restaurant').get(id=food_id)
+        except Food.DoesNotExist:
+            return Response(
+                {'status': 'error', 'message': 'غذا یافت نشد.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        if food.restaurant.owner != manager:
+            return Response(
+                {'status': 'error', 'message': 'این غذا متعلق به رستوران شما نیست.'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        food.delete()
+        return Response(
+            {'status': 'success', 'message': 'غذا با موفقیت حذف شد.'},
+            status=status.HTTP_200_OK
+        )
+
+
 class GetFoodsByAreaView(APIView):
     def post(self, request):
         areaId = request.data.get('areaId')
@@ -297,38 +407,3 @@ class GetFoodDetails(APIView):
         }, status=status.HTTP_200_OK)
 
 
-class DeleteFood(APIView):
-    def post(self, request):
-        food_id = request.data.get("foodId")
-        if not food_id:
-            return Response(
-                {'status': 'error', 'message': 'پارامتر foodId الزامی است.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        manager = getRestaurantManager(request)
-        if not manager:
-            return Response(
-                {'status': 'error', 'message': 'احراز هویت انجام نشده است.'},
-                status=status.HTTP_401_UNAUTHORIZED
-            )
-
-        try:
-            food = Food.objects.select_related('restaurant').get(id=food_id)
-        except Food.DoesNotExist:
-            return Response(
-                {'status': 'error', 'message': 'غذا یافت نشد.'},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        if food.restaurant.owner != manager:
-            return Response(
-                {'status': 'error', 'message': 'این غذا متعلق به رستوران شما نیست.'},
-                status=status.HTTP_403_FORBIDDEN
-            )
-
-        food.delete()
-        return Response(
-            {'status': 'success', 'message': 'غذا با موفقیت حذف شد.'},
-            status=status.HTTP_200_OK
-        )

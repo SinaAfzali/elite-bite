@@ -1,0 +1,54 @@
+{
+  "api": "/api/restaurant/edit",
+  "method": "post",
+  "inputType": "application/json",
+  "input": {
+    "restaurantId": "integer (شناسه رستوران، الزامی)",
+    "name": "string (نام رستوران، اختیاری)",
+    "description": "string (توضیحات رستوران، اختیاری)",
+    "image": "file (عکس رستوران، اختیاری)",
+    "address": "string (آدرس رستوران، اختیاری)",
+    "city": "integer (شناسه شهر، اختیاری)",
+    "phoneNumber": "string (شماره تماس، اختیاری)",
+    "contactEmail": "string (ایمیل تماس، اختیاری)",
+    "startWorkHour": "integer (ساعت شروع کار، اختیاری)",
+    "endWorkHour": "integer (ساعت پایان کار، اختیاری)",
+    "deliveryFeeBase": "float (هزینه پایه ارسال، اختیاری)",
+    "freeDeliveryThreshold": "float (حد آستانه ارسال رایگان، اختیاری)",
+    "bankAccountNumber": "string (شماره حساب بانکی، اختیاری)",
+    "areas": "array of integers (شناسه مناطق سرویس‌دهی، اختیاری)"
+  },
+  "output": [
+    {
+      "status": "success",
+      "message": "رستوران با موفقیت ویرایش شد.",
+      "restaurantId": 1,
+      "statusCode": 200
+    },
+    {
+      "status": "error",
+      "message": "پارامتر restaurantId الزامی است.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "رستوران یافت نشد.",
+      "statusCode": 404
+    },
+    {
+      "status": "error",
+      "message": "این رستوران متعلق به شما نیست.",
+      "statusCode": 403
+    },
+    {
+      "status": "error",
+      "message": "تصویر ارسال شده معتبر نیست.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "شهر مورد نظر یافت نشد.",
+      "statusCode": 400
+    }
+  ]
+}

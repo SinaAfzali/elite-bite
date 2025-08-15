@@ -1,0 +1,35 @@
+{
+  "api": "/api/food/delete",
+  "method": "post",
+  "inputType": "application/json",
+  "input": {
+    "foodId": "integer (شناسه عددی غذا، الزامی)"
+  },
+  "output": [
+    {
+      "status": "success",
+      "message": "غذا با موفقیت حذف شد.",
+      "statusCode": 200
+    },
+    {
+      "status": "error",
+      "message": "پارامتر foodId الزامی است.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "احراز هویت انجام نشده است.",
+      "statusCode": 401
+    },
+    {
+      "status": "error",
+      "message": "غذا یافت نشد.",
+      "statusCode": 404
+    },
+    {
+      "status": "error",
+      "message": "این غذا متعلق به رستوران شما نیست.",
+      "statusCode": 403
+    }
+  ]
+}

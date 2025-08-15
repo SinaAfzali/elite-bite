@@ -1,0 +1,52 @@
+{
+  "api": "/api/food/edit",
+  "method": "post",
+  "inputType": "application/json",
+  "input": {
+    "foodId": "integer (شناسه عددی غذا، الزامی)",
+    "name": "string (اختیاری، نام جدید غذا)",
+    "price": "integer (اختیاری، قیمت جدید غذا)",
+    "description": "string (اختیاری، توضیحات جدید غذا)",
+    "category": "integer (اختیاری، شناسه دسته‌بندی جدید)",
+    "isAvailable": "boolean (اختیاری، وضعیت موجود بودن غذا)",
+    "image": "file (اختیاری، تصویر جدید غذا)"
+  },
+  "output": [
+    {
+      "status": "success",
+      "message": "غذا با موفقیت ویرایش شد.",
+      "foodId": 10,
+      "statusCode": 200
+    },
+    {
+      "status": "error",
+      "message": "پارامتر foodId الزامی است.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "غذا یافت نشد.",
+      "statusCode": 404
+    },
+    {
+      "status": "error",
+      "message": "این غذا متعلق به رستوران شما نیست.",
+      "statusCode": 403
+    },
+    {
+      "status": "error",
+      "message": "دسته‌بندی مورد نظر یافت نشد.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "مقدار قیمت معتبر نیست.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "پیام خطای اعتبارسنجی تصویر (در صورت ارسال تصویر نامعتبر)",
+      "statusCode": 400
+    }
+  ]
+}

@@ -71,6 +71,85 @@ class AddRestaurantView(APIView):
         }, status=status.HTTP_201_CREATED)
 
 
+class EditRestaurantView(APIView):
+    @require_authorization_manager
+    def post(self, request):
+        image_file = request.FILES.get("image")
+        data = request.data.copy()
+
+        restaurant_id = data.get("restaurantId")
+        if not restaurant_id:
+            return Response({
+                "status": "error",
+                "message": "پارامتر restaurantId الزامی است."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            restaurant = Restaurant.objects.get(id=restaurant_id)
+        except Restaurant.DoesNotExist:
+            return Response({
+                "status": "error",
+                "message": "رستوران یافت نشد."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        if restaurant.owner != getRestaurantManager(request):
+            return Response({
+                "status": "error",
+                "message": "این رستوران متعلق به شما نیست."
+            }, status=status.HTTP_403_FORBIDDEN)
+
+        # اعتبارسنجی تصویر در صورت ارسال
+        if image_file:
+            validImage = ImageValidation(image_file)
+            if not validImage['valid']:
+                return Response({
+                    "status": "error",
+                    "message": validImage['message'],
+                }, status=status.HTTP_400_BAD_REQUEST)
+            restaurant.image = '/public/images/' + uploadImage(image_file)
+
+        # به‌روزرسانی فیلدها در صورت ارسال
+        for field in ["name", "description", "address", "phoneNumber", "contactEmail",
+                      "bankAccountNumber"]:
+            if data.get(field):
+                setattr(restaurant, field, data[field].strip())
+
+        if data.get("city"):
+            try:
+                restaurant.city = City.objects.get(id=int(data["city"]))
+            except City.DoesNotExist:
+                return Response({
+                    "status": "error",
+                    "message": "شهر مورد نظر یافت نشد."
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+        if data.get("startWorkHour"):
+            restaurant.startWorkHour = int(data["startWorkHour"])
+        if data.get("endWorkHour"):
+            restaurant.endWorkHour = int(data["endWorkHour"])
+        if data.get("deliveryFeeBase"):
+            restaurant.deliveryFeeBase = float(data["deliveryFeeBase"])
+        if "freeDeliveryThreshold" in data:
+            restaurant.freeDeliveryThreshold = data["freeDeliveryThreshold"]
+
+        # بروزرسانی مناطق سرویس‌دهی
+        if data.getlist('areas[]'):
+            mArea = []
+            for area in data.getlist('areas[]'):
+                try:
+                    mArea.append(Area.objects.get(id=int(area)))
+                except Area.DoesNotExist:
+                    continue
+            restaurant.areas.set(mArea)
+
+        restaurant.save()
+        return Response({
+            "status": "success",
+            "message": "رستوران با موفقیت ویرایش شد.",
+            "restaurantId": restaurant.id
+        }, status=status.HTTP_200_OK)
+
+
 class GetNearestRestaurant(APIView):
     def post(self, request):
         areaId = request.data.get('areaId')
@@ -273,6 +352,7 @@ class GetRestaurantsByFoodCategory(APIView):
 
 
 class GetRestaurantInfo(APIView):
+    @require_authorization_manager
     def get(self, request):
         manager = getRestaurantManager(request)
         if manager:
