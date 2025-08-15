@@ -21,7 +21,7 @@ def SendLoginCode(email: str, role: "customer" or "restairantManager"):
     html = authHtml("کد یکبار مصرف ورود به elite bite", code)
     status = sendEmail(email, "کد یکبار مصرف ورود به elite bite", html)
     if status:
-        code = VerificationCode.objects.create(email=email, code=code, forLogin=False, role=role)
+        code = VerificationCode.objects.create(email=email, code=code, forLogin=True, role=role)
         code.save()
         return True
     else:

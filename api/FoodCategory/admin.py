@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import FoodCategory
 
-# Register your models here.
+@admin.register(FoodCategory)
+class AreaAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    ordering = ('id', )
