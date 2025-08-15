@@ -1,19 +1,17 @@
 import random
-import string
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.db import transaction
 
+import restaurant
+from utilities.sendEmailFunctions.utilities import SendPaymentCode, SendPaymentSuccess, SendStatusOrder
 from restaurantManager.services import getRestaurantManager
 from services.Authorization import require_authorization_manager, require_authorization_customer
 from .models import Order, OrderItem
 from Cart.models import Cart, CartItem
 from food.serializer import FoodSerializer
 from customer.services import getCustomer
-
-def generateRandomCode(length=8):
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
 
 def getCartData(cart):
     items = CartItem.objects.select_related('food').filter(cart=cart)
@@ -44,11 +42,13 @@ class CreateOrderView(APIView):
 
         with transaction.atomic():
             order = Order.objects.create(
+                restaurant=cart[0].food.restaurant,
                 customer=customer,
                 status="waitingForPayment",
-                paymentCode=generateRandomCode()
+                paymentCode=random.randint(10000, 99999)
             )
 
+            totalPrice = 0
             for item in cart_items:
                 OrderItem.objects.create(
                     order=order,
@@ -56,10 +56,15 @@ class CreateOrderView(APIView):
                     foodPrice=item.food.price,
                     foodDescription=item.food.description,
                     foodCategory=item.food.category.id,
-                    image=item.food.image,
                     quantity=item.quantity
                 )
+                totalPrice += item.food.price * item.quantity
             cart_items.delete()  # خالی کردن سبد خرید
+            order.totalPrice = int(totalPrice * 1.1)
+            order.tax = int(totalPrice * 0.10)
+            order.save()
+
+        SendPaymentCode(customer.email, str(order.paymentCode))
 
         return Response({
             "status": "success",
@@ -68,8 +73,9 @@ class CreateOrderView(APIView):
                 "orderId": order.id,
                 "paymentCode": order.paymentCode,
                 "status": order.status,
-                "totalPrice": order.totalPrice(),
-                "tax": order.tax(),
+                "price": int(totalPrice),
+                "totalPrice": int(totalPrice * 1.1),
+                "tax": int(totalPrice * 0.10),
                 "items": [item.to_dict() for item in order.items.all()]
             }
         }, status=status.HTTP_201_CREATED)
@@ -92,6 +98,7 @@ class ConfirmPaymentView(APIView):
 
         order.status = "processing"
         order.save()
+        SendPaymentSuccess(getCustomer(request).email, str(order.id))
         return Response({"status": "success", "message": "پرداخت تأیید شد و سفارش در حال پردازش است.", "data": {"orderId": order.id, "status": order.status}})
 
 # -----------------------------
@@ -105,6 +112,18 @@ class UpdateOrderStatusView(APIView):
         if not order_id or not new_status:
             return Response({"status": "error", "message": "orderId و status الزامی هستند."}, status=status.HTTP_400_BAD_REQUEST)
 
+        status_list = [
+            "waitingForPayment",
+            "processing",
+            "preparing",
+            "delivering",
+            "completed",
+            "canceled"
+        ]
+
+        if new_status not in status_list:
+            return Response({"status": "error", "message": "وضعیت جدید نامعتبر است."}, status=status.HTTP_400_BAD_REQUEST)
+
         try:
             order = Order.objects.get(id=order_id)
         except Order.DoesNotExist:
@@ -112,11 +131,12 @@ class UpdateOrderStatusView(APIView):
 
         manager = getRestaurantManager(request)
         # چک کردن اینکه سفارش مربوط به رستوران مدیر باشد
-        if not order.items.filter(food__restaurant=manager.restaurant).exists():
+        if order.restaurant != manager.restaurant:
             return Response({"status": "error", "message": "این سفارش مربوط به رستوران شما نیست."}, status=status.HTTP_403_FORBIDDEN)
 
         order.status = new_status
         order.save()
+        SendStatusOrder(order.customer.email, str(order.id) ,new_status)
         return Response({"status": "success", "message": f"وضعیت سفارش به {new_status} تغییر کرد.", "data": {"orderId": order.id, "status": order.status}})
 
 # -----------------------------
@@ -137,8 +157,31 @@ class GetLastOrderView(APIView):
             "data": {
                 "orderId": order.id,
                 "status": order.status,
-                "totalPrice": order.totalPrice(),
-                "tax": order.tax(),
+                "totalPrice": order.totalPrice,
+                "tax": order.tax,
                 "items": [item.to_dict() for item in order.items.all()]
+            }
+        })
+
+
+class GetOrderByIdView(APIView):
+    @require_authorization_customer
+    def post(self, request):
+        try:
+            customer = getCustomer(request)
+            orderId = request.data.get("orderId")
+            order = Order.objects.filter(customer=customer, id=orderId)
+        except Order.DoesNotExist:
+            return Response({"status": "error", "message": "سفارشی برای این مشتری یافت نشد."}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({
+            "status": "success",
+            "message": "سفارش دریافت شد.",
+            "data": {
+                "orderId": order[0].id,
+                "status": order[0].status,
+                "totalPrice": order[0].totalPrice,
+                "tax": order[0].tax,
+                "items": [item.to_dict() for item in order[0].items.all()]
             }
         })

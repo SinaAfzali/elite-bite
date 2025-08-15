@@ -7,7 +7,7 @@ from rest_framework import status
 from restaurant.models import Restaurant
 from .models import RestaurantManager
 from userVerification.models import VerificationCode
-from customer.utilities import SendSignupCode, SendLoginCode
+from utilities.sendEmailFunctions.utilities import SendSignupCode, SendLoginCode
 from .services import getRestaurantManager
 
 

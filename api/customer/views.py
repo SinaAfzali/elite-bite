@@ -6,7 +6,7 @@ from rest_framework import status
 from .models import Customer
 from userVerification.models import VerificationCode
 from .services import getCustomer
-from .utilities import SendSignupCode, SendLoginCode
+from utilities.sendEmailFunctions.utilities import SendSignupCode, SendLoginCode
 
 
 class SignupCodeView(APIView):

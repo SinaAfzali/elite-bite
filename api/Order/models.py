@@ -16,7 +16,7 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='orders', null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='waitingForPayment')
-    paymentCode = models.CharField(max_length=10, unique=True)
+    paymentCode = models.IntegerField(unique=True)
     totalPrice = models.PositiveIntegerField(default=0)
     tax = models.PositiveIntegerField(default=0)
     createdAt = models.DateTimeField(auto_now_add=True)
@@ -34,5 +34,12 @@ class OrderItem(models.Model):
     foodCategory = models.IntegerField()
     quantity = models.PositiveIntegerField(default=1)
 
+    def to_dict(self):
+        return {
+            "foodName": self.foodName,
+            "foodDescription": self.foodDescription,
+            "quantity": self.quantity,
+            "foodPrice": str(self.foodPrice)
+        }
     def __str__(self):
         return f"{self.foodName} x {self.quantity}"
