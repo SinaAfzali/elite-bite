@@ -5,6 +5,7 @@ from rest_framework import status
 from Area.models import Area
 from restaurant.models import Restaurant
 from restaurant.services import getRestaurantByRestaurantManagerId
+from review.models import FoodReview
 from services.Authorization import require_authorization_manager
 from services.ImageValidation import ImageValidation
 from services.UploadImages import uploadImage
@@ -378,6 +379,15 @@ class GetFoodDetails(APIView):
                 "message": "غذا یافت نشد."
             }, status=status.HTTP_404_NOT_FOUND)
 
+        # گرفتن لیست نظرات
+        reviews = FoodReview.objects.filter(food=food)
+        review_list = [{
+            "customerName": r.customer.firstName + ' ' + r.customer.lastName,
+            "rating": r.rating,
+            "comment": r.comment,
+            "createdAt": r.createdAt
+        } for r in reviews]
+
         data = {
             "id": food.id,
             "name": food.name,
@@ -394,7 +404,8 @@ class GetFoodDetails(APIView):
             "restaurant": {
                 "id": food.restaurant.id if food.restaurant else None,
                 "name": food.restaurant.name if food.restaurant else None
-            }
+            },
+            "reviews": review_list
         }
 
         return Response({
@@ -402,5 +413,6 @@ class GetFoodDetails(APIView):
             "message": "اطلاعات غذا ارسال شد.",
             "data": data
         }, status=status.HTTP_200_OK)
+
 
 

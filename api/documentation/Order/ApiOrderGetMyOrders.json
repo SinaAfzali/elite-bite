@@ -1,0 +1,40 @@
+{
+  "api": "/api/order/getMyOrders",
+  "method": "get",
+  "auth": "customer",
+  "inputType": "none",
+  "input": {},
+  "output": [
+    {
+      "status": "success",
+      "message": "سفارش دریافت شد.",
+      "data": [
+        {
+          "orderId": "integer",
+          "status": "string (waitingForPayment, processing, preparing, delivering, completed, canceled)",
+          "totalPrice": "integer",
+          "tax": "integer",
+          "items": [
+            {
+              "foodName": "string",
+              "foodDescription": "string",
+              "quantity": "integer",
+              "foodPrice": "string"
+            }
+          ]
+        }
+      ],
+      "statusCode": 200
+    },
+    {
+      "status": "error",
+      "message": "سفارشی برای این مشتری یافت نشد.",
+      "statusCode": 404
+    },
+    {
+      "status": "unauthorized",
+      "message": "دسترسی غیرمجاز",
+      "statusCode": 401
+    }
+  ]
+}

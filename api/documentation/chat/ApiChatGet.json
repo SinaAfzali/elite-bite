@@ -1,0 +1,39 @@
+{
+  "api": "/api/chat/get",
+  "method": "post",
+  "auth": "customer",
+  "inputType": "application/json",
+  "input": {
+    "restaurantId": "integer (شناسه رستوران برای چت، الزامی)"
+  },
+  "output": [
+    {
+      "status": "success",
+      "data": [
+        {
+          "id": 1,
+          "sender": "customer",
+          "message": "سلام، سفارش من آماده شد؟",
+          "timestamp": "2025-08-16T12:30:00Z"
+        },
+        {
+          "id": 2,
+          "sender": "restaurant",
+          "message": "سلام، بله در حال آماده سازی است.",
+          "timestamp": "2025-08-16T12:32:00Z"
+        }
+      ],
+      "statusCode": 200
+    },
+    {
+      "status": "error",
+      "message": "restaurantId الزامی است.",
+      "statusCode": 400
+    },
+    {
+      "status": "unauthorized",
+      "message": "دسترسی غیرمجاز",
+      "statusCode": 401
+    }
+  ]
+}

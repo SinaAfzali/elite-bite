@@ -1,0 +1,36 @@
+{
+  "api": "/api/chat/restaurant/send",
+  "method": "post",
+  "auth": "manager",
+  "inputType": "application/json",
+  "input": {
+    "chatId": "integer (شناسه چت، الزامی)",
+    "message": "string (متن پیام، الزامی)"
+  },
+  "output": [
+    {
+      "status": "success",
+      "message": "پیام ارسال شد.",
+      "data": {
+        "id": 3,
+        "message": "متن پیام ارسال شده"
+      },
+      "statusCode": 201
+    },
+    {
+      "status": "error",
+      "message": "chatId و message الزامی است.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "چت با این شناسه یافت نشد!",
+      "statusCode": 400
+    },
+    {
+      "status": "unauthorized",
+      "message": "دسترسی غیرمجاز",
+      "statusCode": 401
+    }
+  ]
+}

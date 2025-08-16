@@ -25,7 +25,21 @@
         "restaurant": {
           "id": 1,
           "name": "رستوران نمونه"
-        }
+        },
+        "reviews": [
+          {
+            "customerName": "علی رضایی",
+            "rating": 5,
+            "comment": "عالی بود، خیلی خوشمزه!",
+            "createdAt": "2025-08-16T02:50:00Z"
+          },
+          {
+            "customerName": "مریم احمدی",
+            "rating": 4,
+            "comment": "خوب بود اما می‌توانست بهتر باشد.",
+            "createdAt": "2025-08-15T18:20:00Z"
+          }
+        ]
       },
       "statusCode": 200
     },

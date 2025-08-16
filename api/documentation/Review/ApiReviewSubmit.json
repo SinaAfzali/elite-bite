@@ -1,0 +1,48 @@
+{
+  "api": "/api/review/submit",
+  "method": "post",
+  "auth": "customer",
+  "inputType": "application/json",
+  "input": {
+    "foodId": "integer (شناسه عددی غذا، الزامی)",
+    "rating": "integer (امتیاز بین 1 تا 5، الزامی)",
+    "comment": "string (نظر مشتری، حداکثر 500 کاراکتر، اختیاری)"
+  },
+  "output": [
+    {
+      "status": "success",
+      "message": "نظر شما با موفقیت ثبت شد.",
+      "statusCode": 201
+    },
+    {
+      "status": "error",
+      "message": "شناسه غذا و امتیاز الزامی است.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "امتیاز باید یک عدد صحیح باشد.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "امتیاز باید بین 1 تا 5 باشد.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "متن نظر نمی‌تواند بیش از ۵۰۰ کاراکتر باشد.",
+      "statusCode": 400
+    },
+    {
+      "status": "forbidden",
+      "message": "شما قبلاً این غذا را نخریده‌اید یا سفارش شما تکمیل نشده است.",
+      "statusCode": 403
+    },
+    {
+      "status": "unauthorized",
+      "message": "دسترسی غیرمجاز",
+      "statusCode": 401
+    }
+  ]
+}

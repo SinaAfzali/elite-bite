@@ -10,4 +10,8 @@ urlpatterns=[
     path('foodCategory/', include('FoodCategory.urls')),
     path('cart/', include('Cart.urls')),
     path('order/', include('Order.urls')),
+    path('review/', include('review.urls')),
+    path('suggestion/', include('suggestion.urls')),
+    path('chat/', include('chat.urls')),
+
 ]

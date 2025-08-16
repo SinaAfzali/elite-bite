@@ -1,5 +1,6 @@
 from django.db import models
 from customer.models import Customer
+from food.models import Food
 from restaurant.models import Restaurant
 
 
@@ -28,6 +29,7 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    food = models.ForeignKey(Food, on_delete=models.CASCADE, null=True, blank=True)
     foodName = models.CharField(max_length=100)
     foodPrice = models.PositiveIntegerField()
     foodDescription = models.TextField(blank=True, null=True)

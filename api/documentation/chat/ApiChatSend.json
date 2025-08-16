@@ -1,0 +1,31 @@
+{
+  "api": "/api/chat/send",
+  "method": "post",
+  "auth": "customer",
+  "inputType": "application/json",
+  "input": {
+    "restaurantId": "integer (شناسه رستوران، الزامی)",
+    "message": "string (متن پیام، الزامی)"
+  },
+  "output": [
+    {
+      "status": "success",
+      "message": "پیام ارسال شد.",
+      "data": {
+        "id": 12,
+        "message": "متن پیام ارسال شده"
+      },
+      "statusCode": 201
+    },
+    {
+      "status": "error",
+      "message": "restaurantId و message الزامی است.",
+      "statusCode": 400
+    },
+    {
+      "status": "unauthorized",
+      "message": "دسترسی غیرمجاز",
+      "statusCode": 401
+    }
+  ]
+}

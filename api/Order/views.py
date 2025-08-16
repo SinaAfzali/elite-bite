@@ -1,4 +1,6 @@
 import random
+from datetime import timedelta
+from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -42,7 +44,7 @@ class CreateOrderView(APIView):
 
         with transaction.atomic():
             order = Order.objects.create(
-                restaurant=cart[0].food.restaurant,
+                restaurant=cart.foods.all()[0].restaurant,
                 customer=customer,
                 status="waitingForPayment",
                 paymentCode=random.randint(10000, 99999)
@@ -109,6 +111,7 @@ class UpdateOrderStatusView(APIView):
     def post(self, request):
         order_id = request.data.get("orderId")
         new_status = request.data.get("status")
+        waitMinutes = request.data.get("waitMinutes")
         if not order_id or not new_status:
             return Response({"status": "error", "message": "orderId و status الزامی هستند."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -121,7 +124,7 @@ class UpdateOrderStatusView(APIView):
             "canceled"
         ]
 
-        if new_status not in status_list:
+        if new_status not in status_list or new_status == "waitingForPayment":
             return Response({"status": "error", "message": "وضعیت جدید نامعتبر است."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
@@ -136,7 +139,7 @@ class UpdateOrderStatusView(APIView):
 
         order.status = new_status
         order.save()
-        SendStatusOrder(order.customer.email, str(order.id) ,new_status)
+        SendStatusOrder(order.customer.email, str(order.id) ,new_status, waitMinutes)
         return Response({"status": "success", "message": f"وضعیت سفارش به {new_status} تغییر کرد.", "data": {"orderId": order.id, "status": order.status}})
 
 # -----------------------------
@@ -185,3 +188,66 @@ class GetOrderByIdView(APIView):
                 "items": [item.to_dict() for item in order[0].items.all()]
             }
         })
+
+
+class GetOrderByCustomer(APIView):
+    @require_authorization_customer
+    def get(self, request):
+        try:
+            customer = getCustomer(request)
+            orders = Order.objects.filter(customer=customer)
+        except Order.DoesNotExist:
+            return Response({"status": "error", "message": "سفارشی برای این مشتری یافت نشد."}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({
+            "status": "success",
+            "message": "سفارش دریافت شد.",
+            "data": [{
+                "orderId": o.id,
+                "status": o.status,
+                "totalPrice": o.totalPrice,
+                "tax": o.tax,
+                "items": [item.to_dict() for item in o.items.all()]
+            } for o in orders]
+        })
+
+
+class CancelOrderView(APIView):
+    @require_authorization_customer
+    def post(self, request):
+        customer = getCustomer(request)
+        order_id = request.data.get("orderId")
+
+        if not order_id:
+            return Response({"status": "error", "message": "پارامتر orderId الزامی است."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            order = Order.objects.get(id=order_id, customer=customer)
+        except Order.DoesNotExist:
+            return Response({"status": "error", "message": "سفارش یافت نشد."},
+                            status=status.HTTP_404_NOT_FOUND)
+
+        # بررسی وضعیت سفارش
+        if order.status not in ["waitingForPayment", "processing"]:
+            return Response({"status": "error", "message": "سفارش قابل لغو نیست."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # بررسی زمان ثبت سفارش
+        time_diff = timezone.now() - order.createdAt
+        if time_diff > timedelta(minutes=15):
+            return Response({"status": "error", "message": "زمان لغو سفارش به پایان رسیده است."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # لغو سفارش
+        order.status = "canceled"
+        order.save()
+
+        return Response({
+            "status": "success",
+            "message": "سفارش با موفقیت لغو شد.",
+            "data": {
+                "orderId": order.id,
+                "status": order.status
+            }
+        }, status=status.HTTP_200_OK)

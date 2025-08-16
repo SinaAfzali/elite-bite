@@ -49,8 +49,8 @@ def SendPaymentSuccess(email: str, order_id: str):
     else:
         return False
 
-def SendStatusOrder(email: str, order_id: str, status: str):
-    html = orderStatusChangedHtml(order_id, status)
+def SendStatusOrder(email: str, order_id: str, status: str, waitMinutes: str):
+    html = orderStatusChangedHtml(order_id, status, waitMinutes)
     status = sendEmail(email, "تغییر وضعیت سفارش در elite bite", html)
     if status:
         return True

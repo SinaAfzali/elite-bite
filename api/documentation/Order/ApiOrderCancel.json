@@ -1,0 +1,45 @@
+{
+  "api": "/api/order/cancel",
+  "method": "post",
+  "auth": "customer",
+  "inputType": "application/json",
+  "input": {
+    "orderId": "integer (شناسه عددی سفارش، الزامی)"
+  },
+  "output": [
+    {
+      "status": "success",
+      "message": "سفارش با موفقیت لغو شد.",
+      "data": {
+        "orderId": 123,
+        "status": "canceled"
+      },
+      "statusCode": 200
+    },
+    {
+      "status": "error",
+      "message": "پارامتر orderId الزامی است.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "سفارش یافت نشد.",
+      "statusCode": 404
+    },
+    {
+      "status": "error",
+      "message": "سفارش قابل لغو نیست.",
+      "statusCode": 400
+    },
+    {
+      "status": "error",
+      "message": "زمان لغو سفارش به پایان رسیده است.",
+      "statusCode": 400
+    },
+    {
+      "status": "unauthorized",
+      "message": "دسترسی غیرمجاز",
+      "statusCode": 401
+    }
+  ]
+}
